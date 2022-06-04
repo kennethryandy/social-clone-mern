@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../model/user');
 const isAuth = require('../middleware/isAuth');
+const upload = require('../middleware/upload');
 // Get all user
 router.get('/', isAuth, async (req, res, next) => {
 	try {
@@ -21,6 +22,13 @@ router.get('/:id', async (req, res, next) => {
 	} catch (error) {
 		next(error);
 	}
+});
+
+// Upload profile image
+router.post('/profile', isAuth, upload.single("file"), async (req, res) => {
+	if (req.file === undefined) return res.send("you must select a file.");
+	const imgUrl = `http://localhost:5000/file/${req.file.filename}`;
+	return res.send(imgUrl);
 });
 
 
@@ -53,7 +61,7 @@ router.post('/register', async (req, res, next) => {
 	const { fullname, email, password } = req.body;
 	const hashedPw = await bcrypt.hash(password, 12);
 	try {
-		const newUser = new User({ fullname, email, password: hashedPw });
+		const newUser = new User({ fullname, email, password: hashedPw, img: 'no-man.jpg' });
 		await newUser.save();
 		const token = jwt.sign({ userId: newUser._id }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 		delete newUser.password;
