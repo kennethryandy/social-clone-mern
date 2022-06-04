@@ -1,7 +1,9 @@
-import express from 'express';
-import cors from 'cors';
-import mongoose from 'mongoose';
-import morgan from 'morgan';
+const express = require('express');
+const cors = require('cors');
+const mongoose = require('mongoose');
+const morgan = require('morgan');
+const { errorHandler, notFound } = require('./middleware/errorHandlers');
+const user = require('./routes/user');
 
 const app = express();
 app.use(express.json());
@@ -10,12 +12,18 @@ app.use(morgan("dev"));
 
 
 try {
-	mongoose.connect('mongodb://localhost:27017');
+	mongoose.connect('mongodb://localhost:27017/social-clone');
 	console.log('Database connected');
 } catch (error) {
 	console.log(error);
 }
 
+// User routes
+app.use('/api/user', user);
+
+// Error Handlers
+app.use(notFound);
+app.use(errorHandler);
 
 const port = process.env.PORT ? process.env.PORT : 5000;
 
