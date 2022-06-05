@@ -16,12 +16,15 @@ module.exports = async (req, res, next) => {
 		return;
 	}
 
-	const decodedIdToken = jwt.verify(idToken, process.env.TOKEN_SECRET);
-	if (decodedIdToken) {
-		req.user = decodedIdToken;
+	return jwt.verify(idToken, process.env.TOKEN_SECRET, (err, user) => {
+		if (err) {
+			// console.log(err);
+			return res.status(403).send("Unauthorized");
+		}
+		// console.log(user);
+		req.user = user;
 		next();
 		return;
-	}
-	res.status(403).send('Unauthorized');
-	return;
+	});
+
 };

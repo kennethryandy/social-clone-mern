@@ -4,6 +4,7 @@ exports.notFound = (req, res, next) => {
 	const err = new Error(`Not found ${req.originalUrl}`);
 	res.status(404);
 	next(err);
+	return;
 }
 
 exports.errorHandler = (err, req, res, next) => {
@@ -14,4 +15,5 @@ exports.errorHandler = (err, req, res, next) => {
 		stack: err.stack,
 		success: 0
 	});
+	return;
 }

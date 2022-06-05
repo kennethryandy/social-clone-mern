@@ -3,15 +3,17 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
+const Grid = require("gridfs-stream");
 const { errorHandler, notFound } = require('./middleware/errorHandlers');
 const user = require('./routes/user');
-const Grid = require("gridfs-stream");
+const post = require('./routes/post');
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
+app.get('/', (req, res) => res.send("sada"))
 
 try {
 	mongoose.connect(process.env.DATABASE_URI);
@@ -19,8 +21,10 @@ try {
 	console.log('Database connected');
 
 } catch (error) {
+	app.send("An error occured.");
 	console.log(error);
 }
+
 
 let gfs, gridfsBucket;
 const conn = mongoose.connection;
@@ -32,6 +36,8 @@ conn.once("open", function () {
 
 // User routes
 app.use('/api/user', user);
+// Post routes
+app.use('/api/post', post);
 
 
 // media routes
@@ -51,6 +57,6 @@ app.get("/file/:filename", async (req, res) => {
 app.use(notFound);
 app.use(errorHandler);
 
-const port = process.env.PORT ? process.env.PORT : 5000;
+const port = process.env.PORT || 4001;
 
 app.listen(port, () => console.log(`Listening at http://localhost:${port}`));
