@@ -1,14 +1,23 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-	fullname: "",
-	email: "",
-	img: ""
+	authenticated: false,
+	loading: false,
+	errors: {},
+	credentials: {
+		fullname: "",
+		email: "",
+		img: ""
+	}
 };
 
 const userSlice = createSlice({
 	name: "user",
-	initialState
+	initialState,
+	reducers: {
+		setAuth: (state) => state.authenticated = true,
+		setUnAuth: () => initialState,
+	}
 });
 
 export default userSlice.reducer;
