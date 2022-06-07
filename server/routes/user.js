@@ -32,6 +32,7 @@ router.post('/profile', isAuth, upload.single("file"), async (req, res) => {
 });
 
 
+// Login a user
 router.post('/login', async (req, res, next) => {
 	const { email, password } = req.body;
 	try {
@@ -40,10 +41,17 @@ router.post('/login', async (req, res, next) => {
 			const comparePw = await bcrypt.compare(password, user.password);
 			if (comparePw) {
 				const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
+				const { _id: id, fullname, email, img } = user;
 				return res.json({
 					message: "Logged in successfully",
 					success: 1,
-					token
+					token,
+					user: {
+						id,
+						fullname,
+						email,
+						img
+					}
 				});
 			}
 		}

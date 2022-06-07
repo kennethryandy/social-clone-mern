@@ -20,12 +20,15 @@ import { useSelector } from 'react-redux';
 // Styles
 import { Search, SearchIconWrapper, StyledInputBase, Banner, ProfileBtn, MobileMenu } from './NavBarStyles';
 
-
+import { useDispatch } from 'react-redux'
+import { loginUser } from '../../features/user';
 
 const NavBar = ({ darkMode }) => {
 	// const [anchorEl, setAnchorEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 	const { authenticated } = useSelector(store => store.user);
+
+	const dispatch = useDispatch();
 
 	// const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -104,7 +107,7 @@ const NavBar = ({ darkMode }) => {
 						variant="h6"
 						noWrap
 						component="div"
-						sx={{ display: { xs: 'none', sm: 'block' } }}
+						onClick={() => dispatch(loginUser({ email: "new3@email.com", password: "123456" }))}
 					>
 						SC
 					</Banner>
