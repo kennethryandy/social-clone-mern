@@ -33,6 +33,9 @@ const userSlice = createSlice({
 	reducers: {
 		setAuth: (state) => state.authenticated = true,
 		setUnAuth: () => initialState,
+		setError: (state, action) => {
+			state.errors = action.payload
+		}
 	},
 	extraReducers: {
 		[loginUser.pending]: (state) => {
@@ -55,5 +58,6 @@ const userSlice = createSlice({
 	}
 });
 
+export const { setError } = userSlice.actions;
 
 export default userSlice.reducer;
