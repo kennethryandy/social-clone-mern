@@ -4,7 +4,7 @@ const router = require('express').Router();
 
 
 // Get all post
-router.get('/', isAuth, async (req, res, next) => {
+router.get('/all', isAuth, async (req, res, next) => {
 	try {
 		const posts = await Post.find();
 		if (!posts) {

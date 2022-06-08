@@ -5,10 +5,13 @@ const User = require('../model/user');
 const isAuth = require('../middleware/isAuth');
 const upload = require('../middleware/upload');
 // Get all user
-router.get('/', isAuth, async (req, res, next) => {
+router.get('/all', isAuth, async (req, res, next) => {
 	try {
 		const users = await User.find();
-		return res.json(users);
+		return res.json({
+			success: 1,
+			users
+		});
 	} catch (error) {
 		next(error)
 	}
@@ -18,7 +21,10 @@ router.get('/', isAuth, async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
 	try {
 		const user = await User.findById(req.params.id);
-		return res.json(user);
+		return res.json({
+			success: 1,
+			user
+		});
 	} catch (error) {
 		next(error);
 	}
@@ -87,6 +93,7 @@ router.post('/register', async (req, res, next) => {
 		if (error.code === 11000) {
 			return res.status(201).json({
 				message: "Email already taken.",
+				type: "email",
 				success: 0
 			});
 		}
