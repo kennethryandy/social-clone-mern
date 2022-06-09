@@ -91,7 +91,7 @@ router.post('/register', async (req, res, next) => {
 		});
 	} catch (error) {
 		if (error.code === 11000) {
-			return res.status(201).json({
+			return res.status(500).json({
 				message: "Email already taken.",
 				type: "email",
 				success: 0

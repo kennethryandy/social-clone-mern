@@ -48,7 +48,9 @@ export const Banner = styled(Typography)(() => ({
 	"&:hover": {
 		cursor: 'pointer'
 	},
-	fontWeight: 'bold'
+	fontWeight: 'bold',
+	textDecoration: 'none',
+	color: '#e9ebee'
 }));
 
 export const ProfileBtn = styled(Button)(({ theme }) => ({

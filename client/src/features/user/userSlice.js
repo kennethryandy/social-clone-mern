@@ -49,7 +49,6 @@ const userSlice = createSlice({
 		},
 		[registerUser.pending]: (state) => { state.loading = true },
 		[registerUser.fulfilled]: (state, action) => {
-			console.log(action);
 			if (!action.payload.success) {
 				state.errors[action.payload.type || "general"] = action.payload.message;
 			} else {

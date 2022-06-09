@@ -1,4 +1,5 @@
 import { useState, memo } from 'react'
+import { Link } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -20,15 +21,10 @@ import { useSelector } from 'react-redux';
 // Styles
 import { Search, SearchIconWrapper, StyledInputBase, Banner, ProfileBtn, MobileMenu } from './NavBarStyles';
 
-import { useDispatch } from 'react-redux'
-import { loginUser } from '../../features/user';
-
 const NavBar = ({ darkMode }) => {
 	// const [anchorEl, setAnchorEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 	const { authenticated } = useSelector(store => store.user);
-
-	const dispatch = useDispatch();
 
 	// const isMenuOpen = Boolean(anchorEl);
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -106,8 +102,8 @@ const NavBar = ({ darkMode }) => {
 					<Banner
 						variant="h6"
 						noWrap
-						component="div"
-						onClick={() => dispatch(loginUser({ email: "new3@email.com", password: "123456" }))}
+						component={Link}
+						to="/"
 					>
 						SC
 					</Banner>
