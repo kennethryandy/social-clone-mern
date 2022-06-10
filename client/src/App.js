@@ -1,11 +1,15 @@
 import { useState } from 'react';
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 // Components
 import NavBar from "./components/Nav/NavBar";
+import AuthService from './components/AuthService';
+import ProtectedRoute from './components/ProtectedRoute';
 import { AppBarSpacer } from './utils/GlobalStylesComp';
 // Pages
 import Signup from './pages/Signup';
+import Login from './pages/Login';
 import Home from './pages/Home';
 
 // const darkTheme = {
@@ -47,15 +51,17 @@ const lightTheme = {
 };
 
 function App () {
-	const [theme, setTheme] = useState(lightTheme)
+	const [theme, setTheme] = useState(lightTheme);
+
 	return (
 		<ThemeProvider theme={responsiveFontSizes(createTheme(theme))}>
 			<BrowserRouter>
 				<NavBar />
 				<AppBarSpacer />
 				<Routes>
-					<Route path="/" index element={<Home />} />
-					<Route path="/register" element={<Signup />} />
+					<Route path="/" index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+					<Route path="/register" element={<AuthService><Signup /></AuthService>} />
+					<Route path="/login" element={<AuthService><Login /></AuthService>} />
 				</Routes>
 			</BrowserRouter>
 		</ThemeProvider>

@@ -2,8 +2,14 @@ import axios from 'axios';
 
 const setAuthHeader = (token) => {
 	const userToken = `Bearer ${token}`;
-	localStorage.setItem('userToken', userToken);
+	localStorage.setItem('token', userToken);
 	axios.defaults.headers.common['Authorization'] = userToken;
 }
 
-export default setAuthHeader;
+const removeAuthHeader = () => {
+	localStorage.removeItem('token');
+	localStorage.removeItem('cred');
+	delete axios.defaults.headers.common['Authorization'];
+}
+
+export { setAuthHeader, removeAuthHeader };

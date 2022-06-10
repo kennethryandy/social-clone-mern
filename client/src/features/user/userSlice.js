@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import setAuthHeader from "../../utils/setAuthHeader";
+import { setAuthHeader, removeAuthHeader } from "../../utils/setAuthHeader";
 import userService from './userService'
 
 
@@ -7,11 +7,7 @@ const initialState = {
 	authenticated: false,
 	loading: false,
 	errors: {},
-	credentials: {
-		fullname: "",
-		email: "",
-		img: ""
-	}
+	credentials: JSON.parse(localStorage.getItem('cred')) || {}
 };
 
 
@@ -24,22 +20,32 @@ const userSlice = createSlice({
 	name: "user",
 	initialState,
 	reducers: {
-		setUnAuth: () => initialState,
+		setAuth: (state, action) => {
+			state.authenticated = true;
+		},
+		logoutUser: () => {
+			removeAuthHeader();
+			return initialState;
+		},
 		setError: (state, action) => {
 			state.errors = action.payload
-		}
+		},
+		clearErrors: (state) => {
+			state.errors = {};
+		},
 	},
 	extraReducers: {
 		[loginUser.pending]: (state) => {
 			state.loading = true;
 		},
 		[loginUser.fulfilled]: (state, action) => {
-			console.log(action);
 			if (!action.payload.success) {
 				state.errors[action.payload.type || "general"] = action.payload.message;
 			} else {
 				setAuthHeader(action.payload.token);
 				state.credentials = action.payload.user;
+				state.authenticated = true;
+				localStorage.setItem("cred", JSON.stringify(action.payload.user));
 			}
 			state.loading = false;
 		},
@@ -55,16 +61,18 @@ const userSlice = createSlice({
 				setAuthHeader(action.payload.token);
 				state.credentials = action.payload.user;
 				state.authenticated = true;
+				localStorage.setItem("cred", JSON.stringify(action.payload.user));
 			}
 			state.loading = false;
 		},
 		[registerUser.rejected]: (state, action) => {
 			console.log(action);
 			state.loading = false;
+			state.errors.general = action.payload;
 		}
 	}
 });
 
-export const { setError } = userSlice.actions;
+export const { setError, setAuth, logoutUser, clearErrors } = userSlice.actions;
 
 export default userSlice.reducer;

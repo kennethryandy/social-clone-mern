@@ -7,3 +7,8 @@ export const userSchema = object().shape({
 	password: string().min(6, 'Password must be atleast 6 characters.').max(30).oneOf([ref('confirmPassword'), null], 'Password and confirm password must match.').trim().required('Password must not be empty.'),
 	confirmPassword: string().oneOf([ref('password'), null], 'Password and confirm password must match.').required('Confirm password must not be empty.')
 });
+
+export const loginSchema = object().shape({
+	email: string().email('Invalid email address.').required('Email address must not be empty.'),
+	password: string().min(6, 'Password must be atleast 6 characters.').max(30).trim().required('Password must not be empty.')
+});

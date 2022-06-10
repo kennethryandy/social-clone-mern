@@ -8,20 +8,23 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 // import Menu from '@mui/material/Menu';
-import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import LogoutIcon from '@mui/icons-material/Logout';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LightModeIcon from '@mui/icons-material/LightMode';
-import DarkModeIcon from '@mui/icons-material/DarkMode';
+import SearchIcon from '@mui/icons-material/Search';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { logoutUser } from '../../features/user/userSlice'
 
 // Styles
 import { Search, SearchIconWrapper, StyledInputBase, Banner, ProfileBtn, MobileMenu } from './NavBarStyles';
 
 const NavBar = ({ darkMode }) => {
+	const dispatch = useDispatch();
 	// const [anchorEl, setAnchorEl] = useState(null);
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 	const { authenticated } = useSelector(store => store.user);
@@ -91,6 +94,23 @@ const NavBar = ({ darkMode }) => {
 				</IconButton>
 				<p>Profile</p>
 			</MenuItem>
+			<MenuItem
+				onClick={() => {
+					handleMobileMenuClose();
+					dispatch(logoutUser());
+				}}
+			>
+				<IconButton
+					size="large"
+					aria-label="logout current user"
+					aria-controls="logout-current-user"
+					aria-haspopup="true"
+					color="inherit"
+				>
+					<LogoutIcon />
+				</IconButton>
+				<p>Logout</p>
+			</MenuItem>
 		</MobileMenu>
 	);
 
@@ -148,7 +168,7 @@ const NavBar = ({ darkMode }) => {
 									aria-label="options"
 									aria-controls={menuId}
 									aria-haspopup="true"
-									// onClick={handleProfileMenuOpen}
+									onClick={handleMobileMenuOpen}
 									color="inherit"
 								>
 									<ArrowDropDownIcon />

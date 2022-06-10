@@ -46,8 +46,13 @@ router.post('/login', async (req, res, next) => {
 		if (user) {
 			const comparePw = await bcrypt.compare(password, user.password);
 			if (comparePw) {
-				const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 				const { _id: id, fullname, email, img } = user;
+				const token = jwt.sign({
+					id,
+					fullname,
+					email,
+					img
+				}, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 				return res.json({
 					message: "Logged in successfully",
 					success: 1,
@@ -77,7 +82,12 @@ router.post('/register', async (req, res, next) => {
 	try {
 		const newUser = new User({ fullname, email, password: hashedPw, img: 'no-man.jpg' });
 		await newUser.save();
-		const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, { expiresIn: '4h' });
+		const token = jwt.sign({
+			id: newUser._id,
+			fullname: newUser.fullname,
+			email: newUser.email,
+			img: newUser.img
+		}, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 		return res.status(201).json({
 			message: "User created.",
 			success: 1,
