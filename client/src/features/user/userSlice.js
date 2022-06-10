@@ -7,7 +7,8 @@ const initialState = {
 	authenticated: false,
 	loading: false,
 	errors: {},
-	credentials: JSON.parse(localStorage.getItem('cred')) || {}
+	credentials: JSON.parse(localStorage.getItem('cred')) || {},
+	users: []
 };
 
 
@@ -15,6 +16,7 @@ export const loginUser = createAsyncThunk('user/loginUser', userService.login);
 
 export const registerUser = createAsyncThunk('user/registerUser', userService.register);
 
+export const getAllUsers = createAsyncThunk('user/getAllUsers', userService.getAllUsers);
 
 const userSlice = createSlice({
 	name: "user",
@@ -33,6 +35,9 @@ const userSlice = createSlice({
 		clearErrors: (state) => {
 			state.errors = {};
 		},
+		setUsers: (state, action) => {
+			state.users = action.payload;
+		}
 	},
 	extraReducers: {
 		[loginUser.pending]: (state) => {
@@ -69,10 +74,21 @@ const userSlice = createSlice({
 			console.log(action);
 			state.loading = false;
 			state.errors.general = action.payload;
-		}
+		},
+		// [getAllUsers.pending]: (state) => { state.loading = true; },
+		// [getAllUsers.fulfilled]: (state, action) => {
+		// 	if (action.payload.success) {
+		// 		state.users = action.payload.users;
+		// 	}
+		// 	state.loading = false;
+		// },
+		// [getAllUsers.rejected]: (state, action) => {
+		// 	console.log(action);
+		// 	state.loading = false;
+		// }
 	}
 });
 
-export const { setError, setAuth, logoutUser, clearErrors } = userSlice.actions;
+export const { setError, setAuth, logoutUser, clearErrors, setUsers } = userSlice.actions;
 
 export default userSlice.reducer;

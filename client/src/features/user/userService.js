@@ -1,5 +1,14 @@
 import axios from 'axios'
 
+const getAllUsers = async (_, thunkAPI) => {
+	try {
+		const { data } = await axios.get('/user/all');
+		return data;
+	} catch (err) {
+		return thunkAPI.rejectWithValue(err.message);
+	}
+}
+
 const register = async (userData, thunkAPI) => {
 	try {
 		const { data } = await axios.post('/user/register', userData);
@@ -21,6 +30,6 @@ const login = async (cred, thunkAPI) => {
 	}
 }
 
-const userService = { register, login };
+const userService = { register, login, getAllUsers };
 
 export default userService;
