@@ -6,7 +6,7 @@ const router = require('express').Router();
 // Get all post
 router.get('/all', isAuth, async (req, res, next) => {
 	try {
-		const posts = await Post.find();
+		const posts = await Post.find().sort('-createdAt').populate({ path: 'creator', select: ['_id', 'fullname', 'email', 'img'] });
 		if (!posts) {
 			next();
 		}
@@ -43,21 +43,33 @@ router.post('/add', isAuth, async (req, res, next) => {
 
 // Get post by id
 router.get('/:id', isAuth, async (req, res, next) => {
-	Post.findById(req.params.id, (err, post) => {
-		if (err) {
-			next(err);
-		}
+	// Post.findById(req.params.id, (err, post) => {
+	// 	if (err) {
+	// 		next(err);
+	// 	}
+	// 	if (!post) {
+	// 		res.status(404).json({
+	// 			success: 0,
+	// 			message: "Post not found."
+	// 		})
+	// 	}
+	// 	return res.json({
+	// 		success: 1,
+	// 		post
+	// 	});
+	// });
+	try {
+		const post = await Post.findById(req.params.id).sort('-createdAt').populate({ path: 'creator', select: ['_id', 'fullname', 'email', 'img'] });
 		if (!post) {
-			res.status(404).json({
-				success: 0,
-				message: "Post not found."
-			})
+			next();
 		}
 		return res.json({
 			success: 1,
 			post
 		});
-	});
+	} catch (err) {
+		next(err);
+	}
 });
 
 
