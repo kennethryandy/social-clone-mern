@@ -10,7 +10,8 @@ const useAuth = () => {
 
 	if (token) {
 		const decodedToken = jwtDecode(token)
-		if (decodedToken.exp * 4000 < Date.now()) {
+		console.log(decodedToken, Date.now());
+		if (decodedToken.exp * 1000 <= Date.now()) {
 			dispatch(logoutUser());
 		} else {
 			dispatch(setAuth());

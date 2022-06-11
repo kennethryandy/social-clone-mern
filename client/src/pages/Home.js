@@ -1,29 +1,42 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllUsers, setUsers } from '../features/user/userSlice';
 import useSWR from 'swr'
 import axios from 'axios';
-import { setAuthHeader } from '../utils/setAuthHeader';
+
+// MUI
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+// Components
+import SideProfile from '../components/Profile/SideProfile';
+import Posts from '../components/Posts/Posts';
+import { setPosts } from '../features/post/postSlice';
 
 const fetcher = (...args) => axios.get(args).then(res => res.data);
 const devOptions = { shouldRetryOnError: false, revalidateOnFocus: false };
 
 const Home = () => {
-	const { data: userData } = useSWR('http://localhost:5000/api/user/all', fetcher, devOptions);
-	const { data: postData } = useSWR('http://localhost:5000/api/post/all', fetcher, devOptions);
+	const { data } = useSWR('http://localhost:5000/api/post/all', fetcher, devOptions);
 	const dispatch = useDispatch();
-	const { users } = useSelector((store) => store.user);
 
 	useEffect(() => {
-		// dispatch(getAllUsers());
-		if (userData.users && postData.posts) {
-			dispatch(setUsers(userData?.users));
+		if (data?.posts) {
+			dispatch(setPosts(data.posts));
 		}
-
-	}, [userData, postData, dispatch]);
+	}, [data, dispatch]);
 
 	return (
-		<div>Home</div>
+		<Container maxWidth="lg">
+			{data ? (
+				<Grid container spacing={3}>
+					<Grid item md={4}>
+						<SideProfile />
+					</Grid>
+					<Grid item md={8}>
+						<Posts />
+					</Grid>
+				</Grid>
+			) : <p>loading</p>}
+		</Container>
 	)
 }
 

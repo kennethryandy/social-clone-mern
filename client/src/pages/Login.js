@@ -80,7 +80,7 @@ const Login = () => {
 		<>
 			<Box sx={{ maxWidth: "sm", margin: "auto" }}>
 				<Box>
-					<Typography textAlign="center" variant="h3" sx={{ fontWeight: "600" }} color="primary">Create an account</Typography>
+					<Typography textAlign="center" variant="h3" sx={{ fontWeight: "600" }} color="primary">Log in</Typography>
 				</Box>
 				<form onSubmit={handleSubmit}>
 					<Box sx={{ marginY: { xs: 2, md: 3 }, paddingX: { xs: 2, md: 3 }, display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", gap: { xs: 2, md: 3 } }}>
