@@ -86,7 +86,7 @@ router.post('/register', async (req, res, next) => {
 			id: newUser._id,
 			fullname: newUser.fullname,
 			email: newUser.email,
-			img: newUser.img
+			img: `http://localhost:5000/file/${newUser.img}`
 		}, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 		return res.status(201).json({
 			message: "User created.",

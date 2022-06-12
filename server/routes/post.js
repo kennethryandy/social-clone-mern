@@ -32,7 +32,14 @@ router.post('/add', isAuth, async (req, res, next) => {
 		return res.status(201).json({
 			message: "Posted",
 			success: 1,
-			post: newPost
+			post: {
+				...newPost._doc,
+				creator: {
+					...req.user,
+					iat: null,
+					exp: null
+				}
+			}
 		});
 	} catch (error) {
 		console.log(error);

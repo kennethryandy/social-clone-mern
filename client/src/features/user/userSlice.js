@@ -55,8 +55,8 @@ const userSlice = createSlice({
 			state.loading = false;
 		},
 		[loginUser.rejected]: (state, action) => {
-			console.log(action);
 			state.loading = false;
+			state.errors.general = action.payload;
 		},
 		[registerUser.pending]: (state) => { state.loading = true },
 		[registerUser.fulfilled]: (state, action) => {
@@ -71,7 +71,6 @@ const userSlice = createSlice({
 			state.loading = false;
 		},
 		[registerUser.rejected]: (state, action) => {
-			console.log(action);
 			state.loading = false;
 			state.errors.general = action.payload;
 		},
