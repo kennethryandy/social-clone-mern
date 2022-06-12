@@ -13,7 +13,7 @@ import { Paper } from '@mui/material';
 
 const SideProfile = () => {
 	const { credentials } = useSelector(store => store.user);
-	console.log(credentials);
+
 	return (
 		<Paper elevation={3}>
 			<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 }}>
@@ -24,7 +24,7 @@ const SideProfile = () => {
 			<List>
 				<ListItem>
 					<ListItemButton>
-						<UserDetail primary={credentials.fullname} autoCapitalize />
+						<UserDetail primary={credentials.fullname} />
 					</ListItemButton>
 				</ListItem>
 			</List>
@@ -38,7 +38,7 @@ const SideProfile = () => {
 							</IconButton>
 						}>
 						<ListItemButton>
-							<UserDetail primary="Add bio" autoCapitalize />
+							<UserDetail primary="Add bio" />
 						</ListItemButton>
 					</ListItem>
 				)}

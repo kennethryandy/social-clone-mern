@@ -19,6 +19,8 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import Toast from '../components/Snackbar/Toast';
+import SendIcon from '@mui/icons-material/Send';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const Login = () => {
@@ -126,7 +128,16 @@ const Login = () => {
 							</Box>
 						</Box>
 						<Box>
-							<Button type="submit" variant="contained" size="large" fullWidth disabled={loading}>Login</Button>
+							<Button
+								type="submit"
+								variant="contained"
+								size="large"
+								fullWidth
+								disabled={loading}
+								endIcon={loading ? <CircularProgress color="info" size="1em" /> : <SendIcon />}
+							>
+								Login
+							</Button>
 							<Typography component="div" sx={{ marginY: 1 }} variant="caption" textAlign="center">
 								<span>Don't have an account? Register </span>
 								<MuiLink color="secondary" component={Link} to="/register" sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>here <ExitToAppIcon sx={{ marginX: "2px" }} /></MuiLink>

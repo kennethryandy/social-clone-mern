@@ -9,7 +9,7 @@ import Grid from '@mui/material/Grid';
 // Components
 import SideProfile from '../components/Profile/SideProfile';
 import Posts from '../components/Posts/Posts';
-import { setPosts } from '../features/post/postSlice';
+import { setPosts, setLoading, setUnloading } from '../features/post/postSlice';
 
 const fetcher = (...args) => axios.get(args).then(res => res.data);
 const devOptions = { shouldRetryOnError: false, revalidateOnFocus: false };
@@ -19,8 +19,10 @@ const Home = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
+		dispatch(setLoading());
 		if (data?.posts) {
 			dispatch(setPosts(data.posts));
+			dispatch(setUnloading());
 		}
 	}, [data, dispatch]);
 

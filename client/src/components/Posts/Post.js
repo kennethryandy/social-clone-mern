@@ -1,7 +1,7 @@
-import { PostPaperStyled, PostCreatorHeaderStyled } from './PostStyled';
+import { useState } from 'react'
+import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton } from './PostStyled';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 // import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
@@ -16,6 +16,12 @@ import CommentIcon from '@mui/icons-material/Comment';
 dayjs.extend(relativeTime);
 
 const Post = ({ post }) => {
+	const [openComment, setOpenComment] = useState(false);
+
+	const commentClickHandler = () => {
+		setOpenComment(!openComment);
+	}
+
 	return (
 		<PostPaperStyled elevation={3}>
 			<PostCreatorHeaderStyled
@@ -35,8 +41,20 @@ const Post = ({ post }) => {
 			</CardContent>
 			<Divider />
 			<CardActions>
-				<Button size="small" startIcon={<ThumbUpIcon />}>Like</Button>
-				<Button size="small" startIcon={<CommentIcon />}>Comment</Button>
+				<StyledPostButton
+					size="small"
+					startIcon={<ThumbUpIcon color="inherit" />}
+				>
+					Like
+				</StyledPostButton>
+				<StyledPostButton
+					size="small"
+					startIcon={<CommentIcon color="inherit" />}
+					onClick={commentClickHandler}
+					className={openComment ? "active" : ""}
+				>
+					Comment
+				</StyledPostButton>
 			</CardActions>
 			<Divider />
 		</PostPaperStyled>
