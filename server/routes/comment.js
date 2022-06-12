@@ -26,7 +26,7 @@ router.post('/add', isAuth, async (req, res, next) => {
 		return res.status(201).json({
 			success: 1,
 			comment: {
-				...newComment,
+				...newComment._doc,
 				creator: {
 					...req.user,
 					iat: null,

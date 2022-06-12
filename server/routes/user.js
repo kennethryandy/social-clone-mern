@@ -96,7 +96,7 @@ router.post('/register', async (req, res, next) => {
 				id: newUser._id,
 				fullname: newUser.fullname,
 				email: newUser.email,
-				img: newUser.img
+				img: `http://localhost:5000/file/${newUser.img}`
 			}
 		});
 	} catch (error) {

@@ -1,5 +1,4 @@
 const isAuth = require('../middleware/isAuth');
-const Comment = require('../model/comment');
 const Post = require('../model/post');
 const router = require('express').Router();
 
