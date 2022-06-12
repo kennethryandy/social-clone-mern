@@ -7,6 +7,7 @@ const Grid = require("gridfs-stream");
 const { errorHandler, notFound } = require('./middleware/errorHandlers');
 const user = require('./routes/user');
 const post = require('./routes/post');
+const comment = require('./routes/comment');
 
 const app = express();
 app.use(express.json());
@@ -38,6 +39,8 @@ conn.once("open", function () {
 app.use('/api/user', user);
 // Post routes
 app.use('/api/post', post);
+// Comment routes
+app.use('/api/comment', comment);
 
 
 // media routes

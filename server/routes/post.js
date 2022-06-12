@@ -1,4 +1,5 @@
 const isAuth = require('../middleware/isAuth');
+const Comment = require('../model/comment');
 const Post = require('../model/post');
 const router = require('express').Router();
 
@@ -6,7 +7,8 @@ const router = require('express').Router();
 // Get all post
 router.get('/all', isAuth, async (req, res, next) => {
 	try {
-		const posts = await Post.find().sort('-createdAt').populate({ path: 'creator', select: ['_id', 'fullname', 'email', 'img'] });
+		const select = ['_id', 'fullname', 'email', 'img'];
+		const posts = await Post.find().sort('-createdAt').populate({ path: 'creator', select }).populate({ path: 'comments', populate: { path: 'creator', select } });
 		if (!posts) {
 			next();
 		}
