@@ -9,5 +9,14 @@ const creatPostService = async (postData, thunkAPI) => {
 	}
 }
 
+const addCommentService = async (body, thunkAPI) => {
+	try {
+		const { data } = await axios.post('/comment/add', body);
+		return data;
+	} catch (err) {
+		thunkAPI.error(err.message);
+	}
+};
 
-export default { creatPostService };
+const postServices = { addCommentService, creatPostService };
+export default postServices;

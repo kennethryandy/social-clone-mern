@@ -15,16 +15,19 @@ const fetcher = (...args) => axios.get(args).then(res => res.data);
 const devOptions = { shouldRetryOnError: false, revalidateOnFocus: false };
 
 const Home = () => {
+	const { loading } = useSelector(store => store.post);
 	const { data } = useSWR('http://localhost:5000/api/post/all', fetcher, devOptions);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(setLoading());
+		if (!loading) {
+			dispatch(setLoading());
+		}
 		if (data?.posts) {
 			dispatch(setPosts(data.posts));
 			dispatch(setUnloading());
 		}
-	}, [data, dispatch]);
+	}, [loading, data, dispatch]);
 
 	return (
 		<Container maxWidth="lg">

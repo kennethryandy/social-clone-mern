@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 
@@ -20,13 +21,7 @@ export const StyledInput = styled('textarea')(({ theme }) => ({
 	width: "100%",
 	border: 0,
 	outline: 0,
-	resize: "none",
-	"&::-webkit-scrollbar": {
-		width: "1em"
-	},
-	"::-webkit-scrollbar-track": {
-		webkitBoxShadow: "inset 0 0 6px rgba(0,0,0,0.3)",
-	}
+	resize: "none"
 }));
 
 export const StyledPostButton = styled(Button)(({ theme }) => ({

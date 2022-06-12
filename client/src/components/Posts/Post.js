@@ -1,22 +1,24 @@
 import { useState } from 'react'
-import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton } from './PostStyled';
+import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton, StyledCommentInput, CommentInputWrapper } from './PostStyled';
+import Comment from '../Comment/Comments';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Divider from '@mui/material/Divider';
-// import CardMedia from '@mui/material/CardMedia';
+import Avatar from '@mui/material/Avatar';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+// import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Typography from '@mui/material/Typography';
-import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+// MUI ICON
 import CommentIcon from '@mui/icons-material/Comment';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 dayjs.extend(relativeTime);
 
 const Post = ({ post }) => {
-	const [openComment, setOpenComment] = useState(false);
+	const [openComment, setOpenComment] = useState(true);
 
 	const commentClickHandler = () => {
 		setOpenComment(!openComment);
@@ -37,7 +39,7 @@ const Post = ({ post }) => {
 				subheader={dayjs(post.createdAt).fromNow()}
 			/>
 			<CardContent>
-				{post.img ? null : <Typography sx={{ fontWeight: 500 }} variant={post.content.length < 12 ? "h5" : "body1"} component="p">{post.content}</Typography>}
+				{post.img ? null : <Typography variant={post.content.length < 32 ? "h5" : "body1"} component="p">{post.content}</Typography>}
 			</CardContent>
 			<Divider />
 			<CardActions>
@@ -53,10 +55,11 @@ const Post = ({ post }) => {
 					onClick={commentClickHandler}
 					className={openComment ? "active" : ""}
 				>
-					Comment
+					View Comments
 				</StyledPostButton>
 			</CardActions>
 			<Divider />
+			<Comment post={post} openComment={openComment} />
 		</PostPaperStyled>
 	)
 }
