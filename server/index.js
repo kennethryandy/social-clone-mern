@@ -8,6 +8,7 @@ const { errorHandler, notFound } = require('./middleware/errorHandlers');
 const user = require('./routes/user');
 const post = require('./routes/post');
 const comment = require('./routes/comment');
+const like = require('./routes/like');
 
 const app = express();
 app.use(express.json());
@@ -41,6 +42,8 @@ app.use('/api/user', user);
 app.use('/api/post', post);
 // Comment routes
 app.use('/api/comment', comment);
+// Like routes
+app.use('/api/like', like);
 
 
 // media routes

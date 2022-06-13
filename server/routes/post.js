@@ -7,7 +7,7 @@ const router = require('express').Router();
 router.get('/all', isAuth, async (req, res, next) => {
 	try {
 		const select = ['_id', 'fullname', 'email', 'img'];
-		const posts = await Post.find().sort('-createdAt').populate({ path: 'creator', select }).populate({ path: 'comments', populate: { path: 'creator', select } });
+		const posts = await Post.find().sort('-createdAt').populate({ path: 'creator', select }).populate({ path: 'comments', populate: { path: 'creator', select } }).populate({ path: 'likes', populate: { path: 'creator', select } });
 		if (!posts) {
 			next();
 		}

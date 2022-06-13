@@ -14,16 +14,8 @@ const postScema = new Schema({
 		ref: 'User',
 		required: true
 	},
-	// likeCount: {
-	// 	type: Number,
-	// 	default: 0,
-	// },
-	// commentCount: {
-	// 	type: Number,
-	// 	default: 0,
-	// },
 	comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
-	// likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }]
+	likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Like' }]
 },
 	{
 		timestamps: true
