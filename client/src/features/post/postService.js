@@ -29,7 +29,7 @@ const likePostService = async (postId, thunkAPI) => {
 
 const unlikePostService = async (postId, thunkAPI) => {
 	try {
-		const { data } = await axios.put(`/like/${postId}`);
+		const { data } = await axios.delete(`/like/${postId}`);
 		return data;
 	} catch (err) {
 		thunkAPI.error(err.message);

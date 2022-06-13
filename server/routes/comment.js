@@ -2,12 +2,14 @@ const { Router } = require('express');
 const isAuth = require('../middleware/isAuth');
 const Post = require('../model/post');
 const Comment = require('../model/comment');
+const Notification = require('../model/notification');
 
 const router = Router();
 
 // add comment
 router.post('/add', isAuth, async (req, res, next) => {
 	try {
+		// Find the post and add comment to the post
 		const post = await Post.findById(req.body.postId);
 		if (!post) {
 			return res.status(404).json({
@@ -23,6 +25,17 @@ router.post('/add', isAuth, async (req, res, next) => {
 		post.comments.push(newComment._id);
 		await post.save();
 		await newComment.save();
+		// Add notification to the user
+		console.log(req.user, post.creator.toString());
+		if (req.user.id !== post.creator.toString()) {
+			const notification = new Notification({
+				recipient: post.creator._id,
+				sender: req.user.id,
+				type: "comment",
+				post: post.id
+			});
+			await notification.save();
+		}
 		return res.status(201).json({
 			success: 1,
 			comment: {
