@@ -12,7 +12,7 @@ const Posts = () => {
 		<Box>
 			<CreatePost user={credentials} loading={loading} />
 			{posts.length > 0 ? (
-				posts.map(post => <Post key={post._id} post={post} />)
+				posts.map(post => <Post key={post._id} post={post} user={credentials} />)
 			) : <p>Nothing</p>}
 		</Box>
 	)

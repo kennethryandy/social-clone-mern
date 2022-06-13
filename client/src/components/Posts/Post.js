@@ -1,5 +1,7 @@
-import { useState } from 'react'
-import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton, StyledCommentInput, CommentInputWrapper } from './PostStyled';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { likePost, unlikePost } from '../../features/post/postSlice';
+import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton } from './PostStyled';
 import Comment from '../Comment/Comments';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -17,11 +19,21 @@ import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 dayjs.extend(relativeTime);
 
-const Post = ({ post }) => {
+const Post = ({ post, user }) => {
+	const dispatch = useDispatch();
 	const [openComment, setOpenComment] = useState(true);
 
 	const commentClickHandler = () => {
 		setOpenComment(!openComment);
+	}
+
+	const likeUnlikePost = () => {
+		const isLiked = post.likes.findIndex(like => like.creator._id === user.id);
+		if (isLiked !== -1) {
+			dispatch(unlikePost(post._id));
+		} else {
+			dispatch(likePost(post._id));
+		}
 	}
 
 	return (
@@ -54,6 +66,8 @@ const Post = ({ post }) => {
 				<StyledPostButton
 					size="small"
 					startIcon={<ThumbUpIcon color="inherit" />}
+					onClick={likeUnlikePost}
+					className={post.likes.findIndex(like => like.creator._id === user.id) !== -1 ? "active" : ""}
 				>
 					Like
 				</StyledPostButton>

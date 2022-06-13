@@ -18,5 +18,23 @@ const addCommentService = async (body, thunkAPI) => {
 	}
 };
 
-const postServices = { addCommentService, creatPostService };
+const likePostService = async (postId, thunkAPI) => {
+	try {
+		const { data } = await axios.post(`/like/${postId}`);
+		return data;
+	} catch (err) {
+		thunkAPI.error(err.message);
+	}
+}
+
+const unlikePostService = async (postId, thunkAPI) => {
+	try {
+		const { data } = await axios.put(`/like/${postId}`);
+		return data;
+	} catch (err) {
+		thunkAPI.error(err.message);
+	}
+}
+
+const postServices = { addCommentService, creatPostService, likePostService, unlikePostService };
 export default postServices;
