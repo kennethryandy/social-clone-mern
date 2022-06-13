@@ -41,6 +41,14 @@ const Post = ({ post }) => {
 			<CardContent>
 				{post.img ? null : <Typography variant={post.content.length < 32 ? "h5" : "body1"} component="p">{post.content}</Typography>}
 			</CardContent>
+			<CardContent sx={{ paddingY: 1, display: 'flex', gap: 1 }}>
+
+				{post.likes.length > 0 &&
+					<>
+						<ThumbUpIcon color="primary" fontSize='small' />
+						<Typography variant="caption">{post.likes.length}</Typography>
+					</>}
+			</CardContent>
 			<Divider />
 			<CardActions>
 				<StyledPostButton
