@@ -9,6 +9,7 @@ const user = require('./routes/user');
 const post = require('./routes/post');
 const comment = require('./routes/comment');
 const like = require('./routes/like');
+const notification = require('./routes/notification');
 
 const app = express();
 app.use(express.json());
@@ -44,6 +45,8 @@ app.use('/api/post', post);
 app.use('/api/comment', comment);
 // Like routes
 app.use('/api/like', like);
+// Notifications routes
+app.use('/api/notification', notification);
 
 
 // media routes

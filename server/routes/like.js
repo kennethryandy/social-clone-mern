@@ -20,7 +20,7 @@ router.post('/:postId', isAuth, async (req, res, next) => {
 		const updatedPost = await Post.findOneAndUpdate({ _id: req.params.postId }, { $addToSet: { likes: newLike } });
 		await newLike.save();
 		await updatedPost.save();
-		console.log(updatedPost);
+
 		// Add notification to the user
 		if (req.user.id !== updatedPost.creator.toString()) {
 			const notification = new Notification({
