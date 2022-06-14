@@ -30,7 +30,7 @@ const Comments = ({ post, openComment }) => {
 				<Avatar aria-label="profile-picture" src={post.creator.img}>{post.creator.fullname}</Avatar>
 				<CommentInputWrapper onSubmit={commentHandleSubmit}>
 					<StyledCommentInput placeholder="Write a comment..." value={commentInput} onChange={(e) => setCommentInput(e.target.value)} />
-					<IconButton>
+					<IconButton type='submit'>
 						<SendIcon />
 					</IconButton>
 				</CommentInputWrapper>

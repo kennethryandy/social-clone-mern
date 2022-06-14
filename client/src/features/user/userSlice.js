@@ -8,7 +8,7 @@ const initialState = {
 	loading: false,
 	errors: {},
 	credentials: JSON.parse(localStorage.getItem('cred')) || {},
-	users: []
+	notifications: []
 };
 
 
@@ -16,7 +16,11 @@ export const loginUser = createAsyncThunk('user/loginUser', userService.login);
 
 export const registerUser = createAsyncThunk('user/registerUser', userService.register);
 
-export const getAllUsers = createAsyncThunk('user/getAllUsers', userService.getAllUsers);
+// export const getAllUsers = createAsyncThunk('user/getAllUsers', userService.getAllUsers);
+
+export const readNotifications = createAsyncThunk('user/readNotifications', userService.readNotifications);
+
+export const deleteNotification = createAsyncThunk('user/deleteNotification', userService.deleteNotification);
 
 const userSlice = createSlice({
 	name: "user",
@@ -29,6 +33,9 @@ const userSlice = createSlice({
 			removeAuthHeader();
 			return initialState;
 		},
+		setLoading: (state) => {
+			state.loading = true;
+		},
 		setError: (state, action) => {
 			state.errors = action.payload
 		},
@@ -37,6 +44,10 @@ const userSlice = createSlice({
 		},
 		setUsers: (state, action) => {
 			state.users = action.payload;
+		},
+		setNotifications: (state, { payload }) => {
+			state.notifications = payload;
+			state.loading = false;
 		}
 	},
 	extraReducers: {
@@ -74,20 +85,26 @@ const userSlice = createSlice({
 			state.loading = false;
 			state.errors.general = action.payload;
 		},
-		// [getAllUsers.pending]: (state) => { state.loading = true; },
-		// [getAllUsers.fulfilled]: (state, action) => {
-		// 	if (action.payload.success) {
-		// 		state.users = action.payload.users;
-		// 	}
-		// 	state.loading = false;
-		// },
-		// [getAllUsers.rejected]: (state, action) => {
-		// 	console.log(action);
-		// 	state.loading = false;
-		// }
+		// Read notifications
+		[readNotifications.fulfilled]: (state, { payload }) => {
+			if (payload.success) {
+				const readNotifs = state.notifications.map(notification => payload.notification_ids.includes(notification._id) ? { ...notification, read: true } : notification);
+				state.notifications = readNotifs;
+			}
+		},
+		[readNotifications.rejected]: (state, action) => {
+			console.log(action);
+		},
+		// Delete notifications
+		[deleteNotification.fulfilled]: (state, { payload }) => {
+			const notifIdx = state.notifications.findIndex(notification => notification._id === payload.notification_id);
+			if (notifIdx !== -1) {
+				state.notifications.splice(notifIdx, 1);
+			}
+		}
 	}
 });
 
-export const { setError, setAuth, logoutUser, clearErrors, setUsers } = userSlice.actions;
+export const { setError, setAuth, logoutUser, clearErrors, setUsers, setNotifications, setLoading } = userSlice.actions;
 
 export default userSlice.reducer;

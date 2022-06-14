@@ -21,7 +21,7 @@ dayjs.extend(relativeTime);
 
 const Post = ({ post, user }) => {
 	const dispatch = useDispatch();
-	const [openComment, setOpenComment] = useState(true);
+	const [openComment, setOpenComment] = useState(false);
 
 	const commentClickHandler = () => {
 		setOpenComment(!openComment);

@@ -30,6 +30,25 @@ const login = async (cred, thunkAPI) => {
 	}
 }
 
-const userService = { register, login, getAllUsers };
+const readNotifications = async (ids, thunkAPI) => {
+	try {
+		const { data } = await axios.put('/notification/read', ids);
+		return data;
+	} catch (err) {
+		thunkAPI.rejectWithValue(err.message);
+	}
+}
+
+
+const deleteNotification = async (id, thunkAPI) => {
+	try {
+		const { data } = await axios.delete(`/notification/${id}`);
+		return data;
+	} catch (err) {
+		thunkAPI.rejectWithValue(err.message);
+	}
+}
+
+const userService = { register, login, getAllUsers, readNotifications, deleteNotification };
 
 export default userService;

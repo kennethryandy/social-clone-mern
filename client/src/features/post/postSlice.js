@@ -14,8 +14,7 @@ const initialState = {
 	loadingComment: false,
 	loadingLike: false,
 	errors: {},
-	posts: [],
-	notifications: []
+	posts: []
 };
 
 const postSlice = createSlice({

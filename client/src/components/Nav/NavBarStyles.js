@@ -1,8 +1,9 @@
-import { styled, alpha } from '@mui/material/styles';
+import { styled, alpha, lighten } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
+import CardHeader from '@mui/material/CardHeader';
+import { Menu, MenuItem } from '@mui/material';
 
 export const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
@@ -18,6 +19,9 @@ export const Search = styled('div')(({ theme }) => ({
 		marginLeft: theme.spacing(3),
 		width: 'auto',
 	},
+	[theme.breakpoints.down('md')]: {
+		display: 'none'
+	}
 }));
 
 export const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -57,10 +61,34 @@ export const ProfileBtn = styled(Button)(({ theme }) => ({
 	color: theme.palette.primary.contrastText,
 	borderRadius: 99,
 	border: 'none',
-	backgroundColor: 'transparent'
+	backgroundColor: 'transparent',
+	[theme.breakpoints.down('md')]: {
+		display: 'none'
+	}
 }));
 
 
-export const MobileMenu = styled(Menu)(() => ({
-	// backgroundColor: 'red'
+export const NotificationMenuContainer = styled(Menu)(({ theme }) => ({
+	"& .MuiList-root": {
+		paddingTop: 0,
+		paddingBottom: 0
+	}
+}));
+
+export const NotificationMenu = styled(MenuItem)(({ theme }) => ({
+	"&.unread": {
+		backgroundColor: lighten(theme.palette.primary.main, 0.8),
+		color: theme.palette.primary.main
+	},
+	"&:hover": {
+		backgroundColor: lighten(theme.palette.primary.light, 0.6)
+	}
+}));
+
+export const NotificationMessage = styled(CardHeader)(({ theme }) => ({
+	padding: `${theme.spacing(1)} 0px`,
+	width: "100%",
+	"& .MuiCardHeader-action": {
+		paddingLeft: theme.spacing(2)
+	}
 }));

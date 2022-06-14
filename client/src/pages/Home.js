@@ -9,6 +9,7 @@ import Grid from '@mui/material/Grid';
 // Components
 import SideProfile from '../components/Profile/SideProfile';
 import Posts from '../components/Posts/Posts';
+import { setNotifications } from '../features/user/userSlice';
 import { setPosts, setLoading, setUnloading } from '../features/post/postSlice';
 
 const fetcher = (...args) => axios.get(args).then(res => res.data);
@@ -17,7 +18,14 @@ const devOptions = { shouldRetryOnError: false, revalidateOnFocus: false };
 const Home = () => {
 	const { loading } = useSelector(store => store.post);
 	const { data } = useSWR('http://localhost:5000/api/post/all', fetcher, devOptions);
+	const { data: notifData } = useSWR('http://localhost:5000/api/notification/user', fetcher, devOptions);
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		if (notifData?.success) {
+			dispatch(setNotifications(notifData.notifications));
+		}
+	}, [dispatch, notifData]);
 
 	useEffect(() => {
 		if (!loading) {
