@@ -3,8 +3,8 @@ const isAuth = require('../middleware/isAuth');
 const Notification = require('../model/notification');
 const router = Router();
 
-// Get all notifications
-router.get('/all', isAuth, async (req, res, next) => {
+// Get all user notifications
+router.get('/user', isAuth, async (req, res, next) => {
 	try {
 		const select = ['_id', 'fullname', 'email', 'img'];
 		const notifications = await Notification.find({ recipient: req.user.id }).populate({ path: 'sender', select });
@@ -21,7 +21,6 @@ router.get('/all', isAuth, async (req, res, next) => {
 // Read notifications
 router.put('/read', isAuth, async (req, res, next) => {
 	try {
-		console.log(req.body.ids);
 		await Notification.updateMany({ _id: { $in: req.body.ids } }, { $set: { read: true } });;
 		res.json({
 			success: 1,
