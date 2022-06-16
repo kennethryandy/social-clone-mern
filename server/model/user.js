@@ -16,7 +16,10 @@ const userSchema = new Schema({
 		min: 6,
 		required: true
 	},
-	img: String
+	img: String,
+	bio: String,
+	website: String,
+	location: String
 });
 
 module.exports = mongoose.model('User', userSchema);;

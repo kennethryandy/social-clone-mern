@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/user');
 const isAuth = require('../middleware/isAuth');
 const upload = require('../middleware/upload');
+const { reduceUserDetails } = require('../utils/validators');
+
 // Get all user
 router.get('/all', isAuth, async (req, res, next) => {
 	try {
@@ -111,6 +113,20 @@ router.post('/register', async (req, res, next) => {
 	}
 });
 
+
+// update user bio
+router.put('/details', isAuth, async (req, res, next) => {
+	try {
+		const userDetails = reduceUserDetails(req.body);
+		await User.findOneAndUpdate({ _id: req.user.id }, userDetails).orFail(new Error('No docs found!'));
+		res.json({
+			success: 1,
+			userDetails
+		});
+	} catch (err) {
+		next(err);
+	}
+});
 
 
 module.exports = router;
