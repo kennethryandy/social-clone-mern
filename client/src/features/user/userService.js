@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '../../utils/axiosConfig';
 
 const getAllUsers = async (_, thunkAPI) => {
 	try {

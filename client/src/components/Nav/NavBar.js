@@ -30,7 +30,7 @@ import DeleteNotif from '../Modal/DeleteNotif';
 
 dayjs.extend(relativeTime);
 
-const NavBar = ({ darkMode }) => {
+const NavBar = ({ darkMode, params }) => {
 	const dispatch = useDispatch();
 	const [openDeleteModal, setDeleteModal] = useState(false);
 	const [notifId, setNotifId] = useState("");
@@ -93,9 +93,7 @@ const NavBar = ({ darkMode }) => {
 			open={isMobileMenuOpen}
 			onClose={handleMobileMenuClose}
 		>
-			<MenuItem
-			// onClick={handleProfileMenuOpen}
-			>
+			<MenuItem component={Link} to="/profile">
 				<IconButton
 					size="large"
 					aria-label="account of current user"
@@ -200,10 +198,10 @@ const NavBar = ({ darkMode }) => {
 						<>
 							<Box sx={{ flexGrow: 1 }} />
 							<Box sx={{ display: 'flex', alignItems: 'center' }}>
-								<ProfileBtn variant="contained" disableElevation color="info" startIcon={<Avatar sx={{ width: 24, height: 24 }}>{credentials.fullname[0]}</Avatar>}>
+								<ProfileBtn component={Link} to="/profile" variant="contained" disableElevation color="info" startIcon={<Avatar sx={{ width: 24, height: 24 }}>{credentials.fullname[0]}</Avatar>}>
 									{credentials.fullname}
 								</ProfileBtn>
-								<Avatar sx={{ width: 24, height: 24, display: { sm: 'flex', md: 'none' } }}>{credentials.fullname[0]}</Avatar>
+								<Avatar component={Link} to="/profile" sx={{ width: 24, height: 24, display: { sm: 'flex', md: 'none' } }}>{credentials.fullname[0]}</Avatar>
 								<IconButton
 									size="large"
 									color="inherit"

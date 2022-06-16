@@ -62,6 +62,9 @@ export const ProfileBtn = styled(Button)(({ theme }) => ({
 	borderRadius: 99,
 	border: 'none',
 	backgroundColor: 'transparent',
+	"&:hover": {
+		backgroundColor: theme.palette.primary.light
+	},
 	[theme.breakpoints.down('md')]: {
 		display: 'none'
 	}

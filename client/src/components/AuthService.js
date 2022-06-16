@@ -1,18 +1,15 @@
 import useAuth from '../hooks/useAuth';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 const AuthService = ({ children }) => {
-	const isAuth = useAuth();
+	const location = useLocation();
+	const [isAuth, cred] = useAuth();
 
-	if (isAuth) {
-		return <Navigate to='/' />
+	if (isAuth || cred) {
+		return <Navigate to='/' state={{ from: location }} replace />
 	}
 
-	return (
-		<>
-			{children}
-		</>
-	)
+	return children;
 }
 
 export default AuthService

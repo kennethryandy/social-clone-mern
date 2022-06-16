@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import SendIcon from '@mui/icons-material/Send';
 
 
-const Comments = ({ post, openComment }) => {
+const Comments = ({ post, openComment, setOpenComment }) => {
 	const dispatch = useDispatch();
 	const [commentInput, setCommentInput] = useState("")
 
@@ -21,6 +21,7 @@ const Comments = ({ post, openComment }) => {
 		if (commentInput) {
 			dispatch(addComment({ postId: post._id, content: commentInput }));
 			setCommentInput("");
+			setOpenComment(true);
 		}
 	}
 

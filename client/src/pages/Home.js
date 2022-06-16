@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import useSWR from 'swr'
-import axios from 'axios';
+import axios from '../utils/axiosConfig';
 
 // MUI
 import Container from '@mui/material/Container';
@@ -11,10 +11,11 @@ import SideProfile from '../components/Profile/SideProfile';
 import Posts from '../components/Posts/Posts';
 import { setNotifications } from '../features/user/userSlice';
 import { setPosts, setLoading, setUnloading } from '../features/post/postSlice';
+import SinglePostDialog from '../components/Posts/SinglePostDialog';
 
 const fetcher = (...args) => axios.get(args).then(res => res.data);
-const devOptions = { shouldRetryOnError: false, revalidateOnFocus: false };
-
+const devOptions = { shouldRetryOnError: true, revalidateOnFocus: true, revalidateOnMount: true };
+console.log(axios.defaults);
 const Home = () => {
 	const { loading } = useSelector(store => store.post);
 	const { data } = useSWR('http://localhost:5000/api/post/all', fetcher, devOptions);
@@ -38,18 +39,21 @@ const Home = () => {
 	}, [loading, data, dispatch]);
 
 	return (
-		<Container maxWidth="lg">
-			{data ? (
-				<Grid container spacing={3}>
-					<Grid item md={4}>
-						<SideProfile />
+		<>
+			<Container maxWidth="lg">
+				{data ? (
+					<Grid container spacing={3}>
+						<Grid item md={4}>
+							<SideProfile />
+						</Grid>
+						<Grid item md={8}>
+							<Posts />
+						</Grid>
 					</Grid>
-					<Grid item md={8}>
-						<Posts />
-					</Grid>
-				</Grid>
-			) : <p>loading</p>}
-		</Container>
+				) : <p>loading</p>}
+			</Container>
+			<SinglePostDialog />
+		</>
 	)
 }
 

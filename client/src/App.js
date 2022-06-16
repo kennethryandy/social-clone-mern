@@ -11,6 +11,7 @@ import { AppBarSpacer } from './utils/GlobalStylesComp';
 import Signup from './pages/Signup';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import Profile from './components/Profile/Profile';
 
 // const darkTheme = {
 // 	palette: {
@@ -52,7 +53,7 @@ const lightTheme = {
 
 function App () {
 	const [theme, setTheme] = useState(lightTheme);
-	console.log(createTheme(theme));
+	// console.log(createTheme(theme));
 	return (
 		<ThemeProvider theme={responsiveFontSizes(createTheme(theme))}>
 			<BrowserRouter>
@@ -60,6 +61,10 @@ function App () {
 				<AppBarSpacer />
 				<Routes>
 					<Route path="/" index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+					<Route path="/post/:postId" index element={<ProtectedRoute><Home /></ProtectedRoute>} />
+					<Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} >
+						<Route path=":id" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+					</Route>
 					<Route path="/register" element={<AuthService><Signup /></AuthService>} />
 					<Route path="/login" element={<AuthService><Login /></AuthService>} />
 				</Routes>

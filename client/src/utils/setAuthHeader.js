@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from './axiosConfig';
 
 const setAuthHeader = (token) => {
 	const userToken = `Bearer ${token}`;

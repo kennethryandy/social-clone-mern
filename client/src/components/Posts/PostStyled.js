@@ -12,7 +12,14 @@ export const PostPaperStyled = styled(Card)(({ theme }) => ({
 }))
 
 export const PostCreatorHeaderStyled = styled(CardHeader)(({ theme }) => ({
-	padding: 0
+	padding: 0,
+	"& .MuiTypography-root>a": {
+		color: "inherit",
+		textDecoration: "none",
+		"&:hover": {
+			textDecoration: "underline"
+		}
+	}
 }));
 
 export const StyledInput = styled('textarea')(({ theme }) => ({
