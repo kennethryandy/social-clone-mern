@@ -3,9 +3,9 @@ import { Navigate, useLocation } from 'react-router-dom';
 
 const AuthService = ({ children }) => {
 	const location = useLocation();
-	const [isAuth, cred] = useAuth();
+	const [isAuth] = useAuth();
 
-	if (isAuth || cred) {
+	if (isAuth) {
 		return <Navigate to='/' state={{ from: location }} replace />
 	}
 

@@ -7,7 +7,7 @@ const getAllUsers = async (_, thunkAPI) => {
 	} catch (err) {
 		return thunkAPI.rejectWithValue(err.message);
 	}
-}
+};
 
 const register = async (userData, thunkAPI) => {
 	try {
@@ -19,7 +19,7 @@ const register = async (userData, thunkAPI) => {
 		}
 		return thunkAPI.rejectWithValue(err.message);
 	}
-}
+};
 
 const login = async (cred, thunkAPI) => {
 	try {
@@ -28,7 +28,16 @@ const login = async (cred, thunkAPI) => {
 	} catch (err) {
 		return thunkAPI.rejectWithValue(err.message);
 	}
-}
+};
+
+const updateUserDetails = async (userDetails, thunkAPI) => {
+	try {
+		const { data } = await axios.put('/user/details', userDetails);
+		return data;
+	} catch (err) {
+		return thunkAPI.rejectWithValue(err.message);
+	}
+};
 
 const readNotifications = async (ids, thunkAPI) => {
 	try {
@@ -37,7 +46,7 @@ const readNotifications = async (ids, thunkAPI) => {
 	} catch (err) {
 		thunkAPI.rejectWithValue(err.message);
 	}
-}
+};
 
 
 const deleteNotification = async (id, thunkAPI) => {
@@ -47,8 +56,8 @@ const deleteNotification = async (id, thunkAPI) => {
 	} catch (err) {
 		thunkAPI.rejectWithValue(err.message);
 	}
-}
+};
 
-const userService = { register, login, getAllUsers, readNotifications, deleteNotification };
+const userService = { register, login, getAllUsers, readNotifications, deleteNotification, updateUserDetails };
 
 export default userService;

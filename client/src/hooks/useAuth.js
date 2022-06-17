@@ -19,11 +19,6 @@ const useAuth = () => {
 				axios.defaults.headers.common['Authorization'] = token;
 			}
 		}
-		// else if (authenticated && !token) {
-		// 	dispatch(logoutUser());
-		// } else {
-		// 	dispatch(logoutUser());
-		// }
 	}, [token, dispatch]);
 
 	return [authenticated, Object.keys(credentials).length !== 0];

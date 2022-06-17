@@ -15,11 +15,13 @@ import OutlinedInput from '@mui/material/OutlinedInput';
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography';
 import MuiLink from '@mui/material/Link';
+import Toast from '../components/Snackbar/Toast';
 // Icons
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import Toast from '../components/Snackbar/Toast';
+import SendIcon from '@mui/icons-material/Send';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 const Register = () => {
@@ -215,7 +217,7 @@ const Register = () => {
 							</Box>
 						</Box>
 						<Box>
-							<Button type="submit" variant="contained" size="large" fullWidth disabled={loading}>submit</Button>
+							<Button type="submit" variant="contained" size="large" fullWidth disabled={loading} endIcon={loading ? <CircularProgress color="info" size="1em" /> : <SendIcon />}>Register</Button>
 							<Typography component="div" sx={{ marginY: 1 }} variant="caption" textAlign="center">
 								<span>Already have an account? Log in </span>
 								<MuiLink color="secondary" component={Link} to="/login" sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>here <ExitToAppIcon sx={{ marginX: "2px" }} /></MuiLink>

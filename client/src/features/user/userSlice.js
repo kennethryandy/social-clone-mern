@@ -6,6 +6,7 @@ import userService from './userService'
 const initialState = {
 	authenticated: false,
 	loading: false,
+	userDetailsUpdated: false,
 	errors: {},
 	credentials: JSON.parse(localStorage.getItem('cred')) || {},
 	notifications: []
@@ -18,6 +19,8 @@ export const registerUser = createAsyncThunk('user/registerUser', userService.re
 
 // export const getAllUsers = createAsyncThunk('user/getAllUsers', userService.getAllUsers);
 
+export const updateUserDetails = createAsyncThunk('user/updateUserDetails', userService.updateUserDetails);
+
 export const readNotifications = createAsyncThunk('user/readNotifications', userService.readNotifications);
 
 export const deleteNotification = createAsyncThunk('user/deleteNotification', userService.deleteNotification);
@@ -26,12 +29,15 @@ const userSlice = createSlice({
 	name: "user",
 	initialState,
 	reducers: {
-		setAuth: (state, action) => {
+		setAuth: (state) => {
 			state.authenticated = true;
 		},
 		logoutUser: () => {
 			removeAuthHeader();
-			return initialState;
+			return {
+				...initialState,
+				credentials: {}
+			};
 		},
 		setLoading: (state) => {
 			state.loading = true;
@@ -48,7 +54,8 @@ const userSlice = createSlice({
 		setNotifications: (state, { payload }) => {
 			state.notifications = payload;
 			state.loading = false;
-		}
+		},
+		resetUserDetailsUpdated: state => { state.userDetailsUpdated = false; },
 	},
 	extraReducers: {
 		[loginUser.pending]: (state) => {
@@ -101,10 +108,30 @@ const userSlice = createSlice({
 			if (notifIdx !== -1) {
 				state.notifications.splice(notifIdx, 1);
 			}
-		}
+		},
+		// Update User
+		[updateUserDetails.pending]: (state) => {
+			state.loading = true;
+		},
+		[updateUserDetails.fulfilled]: (state, { payload }) => {
+			if (payload.success) {
+				const newCred = {
+					...state.credentials,
+					...payload.userDetails
+				}
+				localStorage.setItem("cred", JSON.stringify(newCred));
+				state.credentials = newCred;
+			}
+			state.userDetailsUpdated = true;
+			state.loading = false;
+		},
+		[updateUserDetails.rejected]: (state, action) => {
+			console.log(action);
+			state.loading = false;
+		},
 	}
 });
 
-export const { setError, setAuth, logoutUser, clearErrors, setUsers, setNotifications, setLoading } = userSlice.actions;
+export const { setError, setAuth, logoutUser, clearErrors, setUsers, setNotifications, setLoading, resetUserDetailsUpdated } = userSlice.actions;
 
 export default userSlice.reducer;
