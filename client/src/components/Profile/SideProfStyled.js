@@ -1,6 +1,23 @@
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import ListItemText from '@mui/material/ListItemText';
+
+export const ProfileImgWrapper = styled(Box)(({ theme }) => ({
+	position: "relative",
+	"& .edit-profile-icon-button": {
+		opacity: 0,
+		transition: theme.transitions.create(['opacity'], {
+			duration: theme.transitions.duration.standard,
+		}),
+		position: "absolute",
+		top: 32,
+		right: 32
+	},
+	"&:hover .edit-profile-icon-button": {
+		opacity: 1
+	},
+}));
 
 export const ProfileImg = styled(Button)(({ theme }) => ({
 	borderRadius: "50%",
@@ -9,6 +26,14 @@ export const ProfileImg = styled(Button)(({ theme }) => ({
 	maxWidth: "240px",
 	width: "100%",
 	height: "100%",
+	"&.preview": {
+		userSelect: "none",
+		pointerEvents: "none",
+		cursor: "default",
+		"& .edit-profile-icon-button": {
+			display: "none"
+		}
+	},
 	"& img": {
 		width: "100%",
 		height: "auto",
@@ -19,29 +44,6 @@ export const ProfileImg = styled(Button)(({ theme }) => ({
 			userSelect: "none",
 			pointerEvents: "none",
 			cursor: "default"
-		}
-	},
-	"&.edit-profile": {
-		position: "relative",
-		"& .edit-profile-icon-button": {
-			opacity: 0,
-			transition: theme.transitions.create(['opacity'], {
-				duration: theme.transitions.duration.standard,
-			}),
-			position: "absolute",
-			top: 32,
-			right: 32
-		},
-		"&:hover .edit-profile-icon-button": {
-			opacity: 1
-		},
-		"&.preview": {
-			userSelect: "none",
-			pointerEvents: "none",
-			cursor: "default",
-			"& .edit-profile-icon-button": {
-				display: "none"
-			}
 		}
 	}
 }));

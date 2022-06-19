@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux'
-import { getUserById, updateProfilePicture, setPreviewProfileImage } from '../../features/user/userSlice';
+import { getUserById, updateProfilePicture, setPreviewProfileImage, setLoading } from '../../features/user/userSlice';
 import UserDetailsInput from '../Modal/UserDetailsInput';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -20,7 +20,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LanguageIcon from '@mui/icons-material/Language';
 // Styled Components
-import { ProfileImg, UserDetail } from './SideProfStyled';
+import { ProfileImg, ProfileImgWrapper, UserDetail } from './SideProfStyled';
 import AddPost from '../Posts/AddPost';
 import Post from '../Posts/Post';
 
@@ -28,7 +28,7 @@ const Profile = () => {
 	const [isCurrentUser, setIsCurrentUser] = useState(true);
 	const [editUserDetail, setEditUserDetail] = useState(false);
 	const [userPost, setUserPost] = useState([]);
-	const { loading, posts } = useSelector(store => store.post)
+	const { loading: postLoading, posts } = useSelector(store => store.post)
 	const { credentials, user, loading: userLoading, loadingProfilePicture, previewProfileImage } = useSelector(store => store.user);
 	const [currentUser, setCurrentUser] = useState(credentials);
 	const inputFileRef = useRef(null);
@@ -36,18 +36,22 @@ const Profile = () => {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		let id = credentials.id;
-		if (params.id) {
-			id = params.id;
+		dispatch(setLoading(true));
+		if (params.id && (credentials.id !== params.id)) {
 			dispatch(getUserById(params.id));
 			setCurrentUser(user);
-			setIsCurrentUser(false)
+			setIsCurrentUser(false);
 		} else {
 			setCurrentUser(credentials);
 		}
-		const findUserPost = posts.filter(post => post.creator._id === id);
+		dispatch(setLoading(false))
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [user, credentials]);
+
+	useEffect(() => {
+		const findUserPost = posts.filter(post => post.creator._id === params.id || credentials.id);
 		setUserPost(findUserPost);
-	}, [setUserPost, credentials, posts, params, dispatch, user]);
+	}, [setUserPost, credentials, posts, params]);
 
 	const handleProfileEditButtonClick = () => {
 		inputFileRef.current.click();
@@ -68,72 +72,79 @@ const Profile = () => {
 		<>
 			{isCurrentUser && <input type="file" name="file" ref={inputFileRef} accept="image/png, image/jpeg" hidden onChange={handleProfileImageChange} />}
 			<Container maxWidth="md">
-				<Paper elevation={3} sx={{ marginBottom: 3 }}>
-					<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 }}>
-						<ProfileImg className={isCurrentUser ? loadingProfilePicture && previewProfileImage ? "edit-profile preview" : "edit-profile" : ""}>
-							{loadingProfilePicture && previewProfileImage ? (
-								<img className="preview-profile-image" src={previewProfileImage} alt={currentUser.fullname} />
-							) : (
-								<img src={currentUser.img || noMan} alt={currentUser.fullname} />
+				{!userLoading ? (
+					<Paper elevation={3} sx={{ marginBottom: 3 }}>
+						<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 }}>
+							<ProfileImgWrapper>
+								<ProfileImg className={isCurrentUser ? loadingProfilePicture && previewProfileImage ? "preview" : "" : ""}>
+									{loadingProfilePicture && previewProfileImage ? (
+										<img className="preview-profile-image" src={previewProfileImage} alt={currentUser.fullname} />
+									) : (
+										<img src={currentUser.img || noMan} alt={currentUser.fullname} />
+									)}
+								</ProfileImg>
+								{isCurrentUser &&
+									<IconButton className="edit-profile-icon-button" onClick={handleProfileEditButtonClick}>
+										<EditIcon />
+									</IconButton>}
+							</ProfileImgWrapper>
+						</Box>
+						<List>
+							<ListItem>
+								<UserDetail primary={currentUser.fullname} />
+							</ListItem>
+						</List>
+						{currentUser.bio && currentUser.location && currentUser.website && <Divider />}
+						<List sx={{ maxWidth: "200px", margin: "auto" }}>
+							{currentUser.bio && (
+								<ListItem>
+									<ListItemIcon>
+										<FeedIcon />
+									</ListItemIcon>
+									<UserDetail className="user-details" primary={currentUser.bio} />
+								</ListItem>
 							)}
-							{isCurrentUser &&
-								<IconButton className="edit-profile-icon-button" onClick={handleProfileEditButtonClick}>
-									<EditIcon />
-								</IconButton>}
-						</ProfileImg>
+							{currentUser.location && (
+								<ListItem>
+									<ListItemIcon>
+										<LocationOnIcon />
+									</ListItemIcon>
+									<UserDetail className="user-details" primary={currentUser.location} />
+								</ListItem>
+							)}
+							{currentUser.website && (
+								<ListItem>
+									<ListItemIcon>
+										<LanguageIcon />
+									</ListItemIcon>
+									<UserDetail className="user-details" primary={currentUser.website} />
+								</ListItem>
+							)}
+							{isCurrentUser && (
+								<ListItem>
+									<ListItemButton onClick={() => setEditUserDetail(true)}>
+										<UserDetail primary="Edit" />
+									</ListItemButton>
+								</ListItem>
+							)}
+						</List>
+					</Paper>
+				) : <p>User loading...</p>}
+				{!postLoading ? (
+					<Box>
+						{credentials.id === currentUser.id &&
+							<AddPost user={credentials} loading={postLoading} />}
+						{userPost.length > 0 ? (
+							userPost.map(post => <Post key={post._id} post={post} user={currentUser} />)
+						) : (
+							<Paper>
+								<Typography variant="h6" textAlign="center" gutterBottom>No Posts</Typography>
+							</Paper>
+						)}
 					</Box>
-					<List>
-						<ListItem>
-							<UserDetail primary={currentUser.fullname} />
-						</ListItem>
-					</List>
-					<Divider />
-					<List sx={{ maxWidth: "200px", margin: "auto" }}>
-						{currentUser.bio && (
-							<ListItem>
-								<ListItemIcon>
-									<FeedIcon />
-								</ListItemIcon>
-								<UserDetail className="user-details" primary={currentUser.bio} />
-							</ListItem>
-						)}
-						{currentUser.location && (
-							<ListItem>
-								<ListItemIcon>
-									<LocationOnIcon />
-								</ListItemIcon>
-								<UserDetail className="user-details" primary={currentUser.location} />
-							</ListItem>
-						)}
-						{currentUser.website && (
-							<ListItem>
-								<ListItemIcon>
-									<LanguageIcon />
-								</ListItemIcon>
-								<UserDetail className="user-details" primary={currentUser.website} />
-							</ListItem>
-						)}
-						{isCurrentUser && (
-							<ListItem>
-								<ListItemButton onClick={() => setEditUserDetail(true)}>
-									<UserDetail primary="Edit" />
-								</ListItemButton>
-							</ListItem>
-						)}
-					</List>
-				</Paper>
-				<Box>
-					{credentials.id === currentUser.id &&
-						<AddPost user={credentials} loading={loading} />}
-					{userPost.length > 0 && !loading ? (
-						userPost.map(post => <Post key={post._id} post={post} user={currentUser} />)
-					) : (
-						<Paper>
-							<Typography variant="h6" textAlign="center" gutterBottom>No Posts</Typography>
-						</Paper>
-					)}
-				</Box>
+				) : <p>post loading...</p>}
 			</Container>
+
 			<UserDetailsInput open={editUserDetail} setOpen={setEditUserDetail} userDetails={currentUser} setCurrentUser={setCurrentUser} />
 		</>
 	)

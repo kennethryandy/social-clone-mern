@@ -46,8 +46,8 @@ const userSlice = createSlice({
 				credentials: {}
 			};
 		},
-		setLoading: (state) => {
-			state.loading = true;
+		setLoading: (state, { payload }) => {
+			state.loading = payload;
 		},
 		setError: (state, action) => {
 			state.errors = action.payload
