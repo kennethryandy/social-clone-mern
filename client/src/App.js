@@ -53,7 +53,7 @@ const lightTheme = {
 
 function App () {
 	const [theme, setTheme] = useState(lightTheme);
-	// console.log(createTheme(theme));
+	console.log(createTheme(theme));
 	return (
 		<ThemeProvider theme={responsiveFontSizes(createTheme(theme))}>
 			<BrowserRouter>

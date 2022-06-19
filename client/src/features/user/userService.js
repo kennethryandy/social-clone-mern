@@ -9,6 +9,15 @@ const getAllUsers = async (_, thunkAPI) => {
 	}
 };
 
+const getUserById = async (userId, thunkAPI) => {
+	try {
+		const { data } = await axios.get(`/user/${userId}`);
+		return data;
+	} catch (err) {
+		return thunkAPI.rejectWithValue(err.message);
+	}
+};
+
 const register = async (userData, thunkAPI) => {
 	try {
 		const { data } = await axios.post('/user/register', userData);
@@ -24,6 +33,15 @@ const register = async (userData, thunkAPI) => {
 const login = async (cred, thunkAPI) => {
 	try {
 		const { data } = await axios.post('/user/login', cred);
+		return data;
+	} catch (err) {
+		return thunkAPI.rejectWithValue(err.message);
+	}
+};
+
+const updateProfilePicture = async (formData, thunkAPI) => {
+	try {
+		const { data } = await axios.post('/user/profile', formData);
 		return data;
 	} catch (err) {
 		return thunkAPI.rejectWithValue(err.message);
@@ -58,6 +76,6 @@ const deleteNotification = async (id, thunkAPI) => {
 	}
 };
 
-const userService = { register, login, getAllUsers, readNotifications, deleteNotification, updateUserDetails };
+const userService = { register, login, getAllUsers, readNotifications, deleteNotification, updateUserDetails, getUserById, updateProfilePicture };
 
 export default userService;

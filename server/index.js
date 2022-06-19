@@ -16,8 +16,6 @@ app.use(express.json());
 app.use(cors());
 app.use(morgan("dev"));
 
-app.get('/', (req, res) => res.send("sada"))
-
 try {
 	mongoose.connect(process.env.DATABASE_URI);
 	// { userNewUrlParse: true, useCreateIndex: true, useUnifiedTopology: true }
@@ -36,6 +34,7 @@ conn.once("open", function () {
 	gfs = Grid(conn.db, mongoose.mongo);
 	gfs.collection('photos');
 });
+
 
 // User routes
 app.use('/api/user', user);
@@ -61,6 +60,7 @@ app.get("/file/:filename", async (req, res) => {
 		res.send("not found");
 	}
 });
+
 
 // Error Handlers
 app.use(notFound);

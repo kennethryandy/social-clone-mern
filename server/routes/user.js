@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+const Grid = require("gridfs-stream");
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -5,6 +7,13 @@ const User = require('../model/user');
 const isAuth = require('../middleware/isAuth');
 const upload = require('../middleware/upload');
 const { reduceUserDetails } = require('../utils/validators');
+
+let gfs;
+const conn = mongoose.connection;
+conn.once("open", function () {
+	gfs = Grid(conn.db, mongoose.mongo);
+	gfs.collection('photos');
+});
 
 // Get all user
 router.get('/all', isAuth, async (req, res, next) => {
@@ -25,7 +34,10 @@ router.get('/:id', async (req, res, next) => {
 		const user = await User.findById(req.params.id);
 		return res.json({
 			success: 1,
-			user
+			user: {
+				...user._doc,
+				id: user._id
+			}
 		});
 	} catch (error) {
 		next(error);
@@ -34,9 +46,19 @@ router.get('/:id', async (req, res, next) => {
 
 // Upload profile image
 router.post('/profile', isAuth, upload.single("file"), async (req, res) => {
-	if (req.file === undefined) return res.send("you must select a file.");
+	if (req.file === undefined) {
+		return res.status(405).json({
+			success: 0,
+			message: "you must select a file."
+		});
+	};
 	const imgUrl = `http://localhost:5000/file/${req.file.filename}`;
-	return res.send(imgUrl);
+	const user = await User.findByIdAndUpdate(req.user.id, { img: imgUrl });
+	await gfs.files.deleteOne({ filename: user.img });
+	return res.status(201).json({
+		success: 1,
+		imgUrl
+	});
 });
 
 
@@ -48,7 +70,7 @@ router.post('/login', async (req, res, next) => {
 		if (user) {
 			const comparePw = await bcrypt.compare(password, user.password);
 			if (comparePw) {
-				const { _id: id, fullname, email, img } = user;
+				const { _id: id, fullname, email, img, bio, website, location } = user;
 				const token = jwt.sign({
 					id,
 					fullname,
@@ -63,7 +85,10 @@ router.post('/login', async (req, res, next) => {
 						id,
 						fullname,
 						email,
-						img
+						img,
+						bio,
+						website,
+						location
 					}
 				});
 			}
@@ -82,13 +107,12 @@ router.post('/register', async (req, res, next) => {
 	const { fullname, email, password } = req.body;
 	const hashedPw = await bcrypt.hash(password, 12);
 	try {
-		const newUser = new User({ fullname, email, password: hashedPw, img: 'no-man.jpg' });
+		const newUser = new User({ fullname, email, password: hashedPw });
 		await newUser.save();
 		const token = jwt.sign({
 			id: newUser._id,
 			fullname: newUser.fullname,
 			email: newUser.email,
-			img: `http://localhost:5000/file/${newUser.img}`
 		}, process.env.TOKEN_SECRET, { expiresIn: '4h' });
 		return res.status(201).json({
 			message: "User created.",
@@ -97,8 +121,7 @@ router.post('/register', async (req, res, next) => {
 			user: {
 				id: newUser._id,
 				fullname: newUser.fullname,
-				email: newUser.email,
-				img: `http://localhost:5000/file/${newUser.img}`
+				email: newUser.email
 			}
 		});
 	} catch (error) {

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { likePost, unlikePost } from '../../features/post/postSlice';
 import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton } from './PostStyled';
+import noMan from '../../assets/image/no-man.jpg';
 import Comment from '../Comment/Comments';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -43,7 +44,7 @@ const Post = ({ post, user, showComment = false }) => {
 			<PostPaperStyled elevation={3}>
 				<PostCreatorHeaderStyled
 					avatar={
-						<Avatar aria-label="profile-picture" component={Link} to={`/profile/${post.creator._id}`} src={post.creator.img}>{post.creator.fullname}</Avatar>
+						<Avatar aria-label="profile-picture" component={Link} to={`/profile/${post.creator._id}`} src={post.creator.img || noMan}>{post.creator.fullname[0]}</Avatar>
 					}
 					action={
 						<IconButton aria-label="settings">

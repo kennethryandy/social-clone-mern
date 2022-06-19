@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addComment } from '../../features/post/postSlice';
 import { StyledCommentInput, CommentInputWrapper } from './CommentStyled';
+import noMan from '../../assets/image/no-man.jpg';
 import Comment from './Comment'
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -28,7 +29,7 @@ const Comments = ({ post, openComment, setOpenComment }) => {
 	return (
 		<>
 			<Box sx={{ display: "flex", alignItems: "center", gap: 1, paddingTop: 3, paddingBottom: 3 }}>
-				<Avatar aria-label="profile-picture" src={post.creator.img}>{post.creator.fullname}</Avatar>
+				<Avatar aria-label="profile-picture" src={post.creator.img || noMan}>{post.creator.fullname[0]}</Avatar>
 				<CommentInputWrapper onSubmit={commentHandleSubmit}>
 					<StyledCommentInput placeholder="Write a comment..." value={commentInput} onChange={(e) => setCommentInput(e.target.value)} />
 					<IconButton type='submit'>

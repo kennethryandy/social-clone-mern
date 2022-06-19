@@ -5,41 +5,67 @@ import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
+import noMan from '../../assets/image/no-man.jpg';
 // MUI ICONS
 import EditIcon from '@mui/icons-material/Edit';
+import FeedIcon from '@mui/icons-material/Feed';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LanguageIcon from '@mui/icons-material/Language';
 // Styled Components
 import { ProfileImg, UserDetail } from './SideProfStyled';
 
 const SideProfile = () => {
 	const { credentials } = useSelector(store => store.user);
-
 	return (
 		<Paper elevation={3}>
 			<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 }}>
 				<ProfileImg component={Link} to="/profile">
-					<img src={credentials.img} alt={credentials.fullname} />
+					<img src={credentials.img || noMan} alt={credentials.fullname} />
 				</ProfileImg>
 			</Box>
 			<List>
 				<ListItem>
-					<ListItemButton>
+					<ListItemButton component={Link} to="/profile">
 						<UserDetail primary={credentials.fullname} />
 					</ListItemButton>
 				</ListItem>
 			</List>
 			<Divider />
 			<List>
-				{credentials.bio ? (<>sds</>) : (
-					<ListItem
-						secondaryAction={
+				{credentials.bio && (
+					<ListItem>
+						<ListItemIcon>
+							<FeedIcon />
+						</ListItemIcon>
+						<UserDetail className="user-details" primary={credentials.bio} />
+					</ListItem>
+				)}
+				{credentials.location && (
+					<ListItem>
+						<ListItemIcon>
+							<LocationOnIcon />
+						</ListItemIcon>
+						<UserDetail className="user-details" primary={credentials.location} />
+					</ListItem>
+				)}
+				{credentials.website && (
+					<ListItem>
+						<ListItemIcon>
+							<LanguageIcon />
+						</ListItemIcon>
+						<UserDetail className="user-details" primary={credentials.website} />
+					</ListItem>
+				)}
+				{(!credentials.bio && !credentials.location && !credentials.website) && (
+					<ListItem>
+						<ListItemButton component={Link} to="/profile">
+							<UserDetail primary="Add bio" />
 							<IconButton edge="end" aria-label="edit">
 								<EditIcon />
 							</IconButton>
-						}>
-						<ListItemButton>
-							<UserDetail primary="Add bio" />
 						</ListItemButton>
 					</ListItem>
 				)}

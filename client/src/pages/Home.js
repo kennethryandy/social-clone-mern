@@ -15,7 +15,7 @@ import SinglePostDialog from '../components/Posts/SinglePostDialog';
 
 const fetcher = (...args) => axios.get(args).then(res => res.data);
 const devOptions = { shouldRetryOnError: true, revalidateOnFocus: true, revalidateOnMount: true };
-console.log(axios.defaults);
+
 const Home = () => {
 	const { loading } = useSelector(store => store.post);
 	const { data } = useSWR('http://localhost:5000/api/post/all', fetcher, devOptions);

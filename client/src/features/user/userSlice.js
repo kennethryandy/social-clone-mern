@@ -6,7 +6,10 @@ import userService from './userService'
 const initialState = {
 	authenticated: false,
 	loading: false,
+	loadingProfilePicture: false,
+	previewProfileImage: null,
 	userDetailsUpdated: false,
+	user: {},
 	errors: {},
 	credentials: JSON.parse(localStorage.getItem('cred')) || {},
 	notifications: []
@@ -18,6 +21,10 @@ export const loginUser = createAsyncThunk('user/loginUser', userService.login);
 export const registerUser = createAsyncThunk('user/registerUser', userService.register);
 
 // export const getAllUsers = createAsyncThunk('user/getAllUsers', userService.getAllUsers);
+
+export const getUserById = createAsyncThunk('user/getUserById', userService.getUserById);
+
+export const updateProfilePicture = createAsyncThunk('user/updateProfilePicture', userService.updateProfilePicture);
 
 export const updateUserDetails = createAsyncThunk('user/updateUserDetails', userService.updateUserDetails);
 
@@ -48,12 +55,15 @@ const userSlice = createSlice({
 		clearErrors: (state) => {
 			state.errors = {};
 		},
-		setUsers: (state, action) => {
-			state.users = action.payload;
-		},
+		// setUsers: (state, action) => {
+		// 	state.users = action.payload;
+		// },
 		setNotifications: (state, { payload }) => {
 			state.notifications = payload;
 			state.loading = false;
+		},
+		setPreviewProfileImage: (state, { payload }) => {
+			state.previewProfileImage = payload;
 		},
 		resetUserDetailsUpdated: state => { state.userDetailsUpdated = false; },
 	},
@@ -92,6 +102,20 @@ const userSlice = createSlice({
 			state.loading = false;
 			state.errors.general = action.payload;
 		},
+		// Get User By Id
+		[getUserById.pending]: (state) => {
+			state.loading = true;
+		},
+		[getUserById.fulfilled]: (state, { payload }) => {
+			if (payload.success) {
+				state.user = payload.user;
+			}
+			state.loading = false;
+		},
+		[getUserById.rejected]: (state, action) => {
+			console.log(action);
+			state.loading = false;
+		},
 		// Read notifications
 		[readNotifications.fulfilled]: (state, { payload }) => {
 			if (payload.success) {
@@ -129,9 +153,24 @@ const userSlice = createSlice({
 			console.log(action);
 			state.loading = false;
 		},
+		// Change Profile Picture
+		[updateProfilePicture.pending]: (state) => { state.loadingProfilePicture = true; },
+		[updateProfilePicture.fulfilled]: (state, { payload }) => {
+			console.log(payload);
+			if (payload.success) {
+				localStorage.setItem("cred", JSON.stringify({ ...state.credentials, img: payload.imgUrl }));
+				state.credentials.img = payload.imgUrl;
+			}
+			state.loadingProfilePicture = false;
+			state.previewProfileImage = null;
+		},
+		[updateProfilePicture.rejected]: (state, action) => {
+			console.log(action);
+			state.loadingProfilePicture = false;
+		}
 	}
 });
 
-export const { setError, setAuth, logoutUser, clearErrors, setUsers, setNotifications, setLoading, resetUserDetailsUpdated } = userSlice.actions;
+export const { setError, setAuth, logoutUser, clearErrors, setUsers, setNotifications, setLoading, resetUserDetailsUpdated, setPreviewProfileImage } = userSlice.actions;
 
 export default userSlice.reducer;
