@@ -197,7 +197,7 @@ const NavBar = ({ handleThemeChange, mode }) => {
 						edge="start"
 						color="inherit"
 						aria-label="menu"
-						sx={{ mr: 2 }}
+						sx={{ mr: 2, display: { sm: "inline-flex", md: "none" } }}
 						onClick={handleOpenDrawer}
 					>
 						<MenuIcon />
