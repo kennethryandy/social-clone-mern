@@ -7,6 +7,7 @@ import axios from '../utils/axiosConfig';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 // Components
+import { PostSkeleton, ProfileSkeleton } from '../components/Skeletons';
 import SideProfile from '../components/Profile/SideProfile';
 import Posts from '../components/Posts/Posts';
 import { setNotifications } from '../features/user/userSlice';
@@ -41,16 +42,14 @@ const Home = () => {
 	return (
 		<>
 			<Container maxWidth="lg">
-				{data ? (
-					<Grid container spacing={3}>
-						<Grid item md={4}>
-							<SideProfile />
-						</Grid>
-						<Grid item md={8}>
-							<Posts />
-						</Grid>
+				<Grid container spacing={3}>
+					<Grid item md={4}>
+						{data ? <SideProfile /> : <ProfileSkeleton />}
 					</Grid>
-				) : <p>loading</p>}
+					<Grid item md={8}>
+						{data ? <Posts /> : <PostSkeleton />}
+					</Grid>
+				</Grid>
 			</Container>
 			<SinglePostDialog />
 		</>

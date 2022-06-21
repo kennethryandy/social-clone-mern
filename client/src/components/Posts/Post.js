@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { likePost, unlikePost } from '../../features/post/postSlice';
@@ -85,4 +85,4 @@ const Post = ({ post, user, showComment = false }) => {
 	)
 }
 
-export default Post
+export default memo(Post);

@@ -22,8 +22,6 @@ export const registerUser = createAsyncThunk('user/registerUser', userService.re
 
 // export const getAllUsers = createAsyncThunk('user/getAllUsers', userService.getAllUsers);
 
-export const getUserById = createAsyncThunk('user/getUserById', userService.getUserById);
-
 export const updateProfilePicture = createAsyncThunk('user/updateProfilePicture', userService.updateProfilePicture);
 
 export const updateUserDetails = createAsyncThunk('user/updateUserDetails', userService.updateUserDetails);
@@ -55,9 +53,13 @@ const userSlice = createSlice({
 		clearErrors: (state) => {
 			state.errors = {};
 		},
-		// setUsers: (state, action) => {
-		// 	state.users = action.payload;
-		// },
+		setUser: (state, action) => {
+			delete action.payload.password;
+			state.user = {
+				...action.payload,
+				id: action.payload._id
+			};
+		},
 		setNotifications: (state, { payload }) => {
 			state.notifications = payload;
 			state.loading = false;
@@ -102,20 +104,6 @@ const userSlice = createSlice({
 			state.loading = false;
 			state.errors.general = action.payload;
 		},
-		// Get User By Id
-		[getUserById.pending]: (state) => {
-			state.loading = true;
-		},
-		[getUserById.fulfilled]: (state, { payload }) => {
-			if (payload.success) {
-				state.user = payload.user;
-			}
-			state.loading = false;
-		},
-		[getUserById.rejected]: (state, action) => {
-			console.log(action);
-			state.loading = false;
-		},
 		// Read notifications
 		[readNotifications.fulfilled]: (state, { payload }) => {
 			if (payload.success) {
@@ -145,6 +133,7 @@ const userSlice = createSlice({
 				}
 				localStorage.setItem("cred", JSON.stringify(newCred));
 				state.credentials = newCred;
+				state.user = newCred;
 			}
 			state.userDetailsUpdated = true;
 			state.loading = false;
@@ -156,10 +145,10 @@ const userSlice = createSlice({
 		// Change Profile Picture
 		[updateProfilePicture.pending]: (state) => { state.loadingProfilePicture = true; },
 		[updateProfilePicture.fulfilled]: (state, { payload }) => {
-			console.log(payload);
 			if (payload.success) {
 				localStorage.setItem("cred", JSON.stringify({ ...state.credentials, img: payload.imgUrl }));
 				state.credentials.img = payload.imgUrl;
+				state.user.img = payload.imgUrl;
 			}
 			state.loadingProfilePicture = false;
 			state.previewProfileImage = null;
@@ -171,6 +160,6 @@ const userSlice = createSlice({
 	}
 });
 
-export const { setError, setAuth, logoutUser, clearErrors, setUsers, setNotifications, setLoading, resetUserDetailsUpdated, setPreviewProfileImage } = userSlice.actions;
+export const { setError, setAuth, setUser, logoutUser, clearErrors, setUsers, setNotifications, setLoading, resetUserDetailsUpdated, setPreviewProfileImage } = userSlice.actions;
 
 export default userSlice.reducer;

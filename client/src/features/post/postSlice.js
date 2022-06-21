@@ -14,7 +14,8 @@ const initialState = {
 	loadingComment: false,
 	loadingLike: false,
 	errors: {},
-	posts: []
+	posts: [],
+	userPosts: []
 };
 
 const postSlice = createSlice({
@@ -29,16 +30,23 @@ const postSlice = createSlice({
 		},
 		setUnloading: (state) => {
 			state.loading = false;
-		}
+		},
+		setUserPosts: (state, { payload }) => {
+			state.userPosts = payload;
+		},
 	},
 	extraReducers: {
 		// Post
 		[createPost.pending]: (state) => {
 			state.loading = true;
 		},
-		[createPost.fulfilled]: (state, action) => {
-			if (action.payload.success) {
-				state.posts.unshift(action.payload.post)
+		[createPost.fulfilled]: (state, { payload }) => {
+			console.log(payload);
+			if (payload.data.success) {
+				state.posts.unshift(payload.data.post);
+				if (payload.user?.id === payload.data.post.creator.id) {
+					state.userPosts.unshift(payload.data.post);
+				}
 			}
 			state.loading = false;
 		},
@@ -53,7 +61,13 @@ const postSlice = createSlice({
 		[addComment.fulfilled]: (state, action) => {
 			if (action.payload.success) {
 				const postIdx = state.posts.findIndex(post => post._id === action.payload.comment.postId);
-				state.posts[postIdx].comments.push(action.payload.comment);
+				if (postIdx !== -1) {
+					state.posts[postIdx].comments.push(action.payload.comment);
+				}
+				const userPostIdx = state.userPosts.findIndex(post => post._id === action.payload.comment.postId);
+				if (userPostIdx !== -1) {
+					state.userPosts[userPostIdx].comments.push(action.payload.comment);
+				}
 			}
 			state.loading = false;
 		},
@@ -68,9 +82,19 @@ const postSlice = createSlice({
 		[likePost.fulfilled]: (state, { payload }) => {
 			if (payload.success) {
 				const postIdx = state.posts.findIndex(post => post._id === payload.postId);
+				const user = JSON.parse(localStorage.getItem('cred'));
 				if (postIdx !== -1) {
-					const user = JSON.parse(localStorage.getItem('cred'));
 					state.posts[postIdx].likes.push({
+						...payload.like,
+						creator: {
+							...user,
+							_id: user.id
+						}
+					});
+				}
+				const userPostIdx = state.userPosts.findIndex(post => post._id === payload.postId);
+				if (userPostIdx !== -1) {
+					state.userPosts[userPostIdx].likes.push({
 						...payload.like,
 						creator: {
 							...user,
@@ -98,6 +122,13 @@ const postSlice = createSlice({
 						state.posts[postIdx].likes.splice(likeIdx, 1);
 					}
 				}
+				const userPostIdx = state.userPosts.findIndex(post => post._id === payload.postId);
+				if (userPostIdx !== -1) {
+					const userPostLikeIdx = state.userPosts[userPostIdx].likes.findIndex(like => like._id === payload.likeId);
+					if (userPostLikeIdx !== -1) {
+						state.userPosts[userPostIdx].likes.splice(userPostLikeIdx, 1);
+					}
+				}
 			}
 			state.loadingLike = false;
 		},
@@ -108,6 +139,6 @@ const postSlice = createSlice({
 	}
 });
 
-export const { setPosts, setLoading, setUnloading } = postSlice.actions;
+export const { setPosts, setLoading, setUnloading, setUserPosts } = postSlice.actions;
 
 export default postSlice.reducer;

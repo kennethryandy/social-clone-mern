@@ -1,5 +1,6 @@
 import { useState, memo } from 'react'
 import { Link } from 'react-router-dom';
+import noMan from '../../assets/image/no-man.jpg';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import AppBar from '@mui/material/AppBar';
@@ -30,7 +31,7 @@ import DeleteNotif from '../Modal/DeleteNotif';
 
 dayjs.extend(relativeTime);
 
-const NavBar = ({ darkMode, params }) => {
+const NavBar = ({ darkMode }) => {
 	const dispatch = useDispatch();
 	const [openDeleteModal, setDeleteModal] = useState(false);
 	const [notifId, setNotifId] = useState("");
@@ -198,7 +199,7 @@ const NavBar = ({ darkMode, params }) => {
 						<>
 							<Box sx={{ flexGrow: 1 }} />
 							<Box sx={{ display: 'flex', alignItems: 'center' }}>
-								<ProfileBtn component={Link} to="/profile" variant="contained" disableElevation color="info" startIcon={<Avatar sx={{ width: 24, height: 24 }}>{credentials.fullname[0]}</Avatar>}>
+								<ProfileBtn component={Link} to="/profile" variant="contained" disableElevation color="info" startIcon={<Avatar sx={{ width: 24, height: 24 }} src={credentials?.img || noMan}>{credentials.fullname[0]}</Avatar>}>
 									{credentials.fullname}
 								</ProfileBtn>
 								<Avatar component={Link} to="/profile" sx={{ width: 24, height: 24, display: { sm: 'flex', md: 'none' } }}>{credentials.fullname[0]}</Avatar>

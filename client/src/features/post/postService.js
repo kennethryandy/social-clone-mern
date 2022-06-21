@@ -3,7 +3,10 @@ import axios from '../../utils/axiosConfig';
 const creatPostService = async (postData, thunkAPI) => {
 	try {
 		const { data } = await axios.post("/post/add", postData);
-		return data;
+		return {
+			data,
+			user: thunkAPI.getState().user.user
+		};
 	} catch (err) {
 		thunkAPI.error(err.message);
 	}
