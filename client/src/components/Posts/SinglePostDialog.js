@@ -32,7 +32,7 @@ const SinglePostDialog = () => {
 
 	return (
 		<Dialog open={open} onClose={handleClosePostDialog} maxWidth="md" fullWidth PaperComponent="div">
-			{Object.keys(post).length !== 0 && <Post post={post} user={credentials} showComment={true} />}
+			{Object.keys(post).length !== 0 && <Post post={post} user={credentials} showComment={true} dialog={true} handleClosePostDialog={handleClosePostDialog} />}
 		</Dialog>
 	)
 }

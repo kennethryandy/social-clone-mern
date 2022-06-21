@@ -1,4 +1,5 @@
 import { useState, memo } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { likePost, unlikePost } from '../../features/post/postSlice';
@@ -17,12 +18,13 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 // MUI ICON
 import CommentIcon from '@mui/icons-material/Comment';
+import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 
 dayjs.extend(relativeTime);
 
-const Post = ({ post, user, showComment = false }) => {
+const Post = ({ post, user, showComment, dialog, handleClosePostDialog }) => {
 	const dispatch = useDispatch();
 	const [openComment, setOpenComment] = useState(showComment);
 
@@ -47,8 +49,8 @@ const Post = ({ post, user, showComment = false }) => {
 						<Avatar aria-label="profile-picture" component={Link} to={`/profile/${post.creator._id}`} src={post.creator.img || noMan}>{post.creator.fullname[0]}</Avatar>
 					}
 					action={
-						<IconButton aria-label="settings">
-							<MoreVertIcon />
+						<IconButton aria-label="settings" onClick={dialog ? handleClosePostDialog : () => null}>
+							{dialog ? <CloseIcon /> : <MoreVertIcon />}
 						</IconButton>
 					}
 					title={<Link to={`/profile/${post.creator._id}`}>{post.creator.fullname}</Link>}
@@ -83,6 +85,19 @@ const Post = ({ post, user, showComment = false }) => {
 			</PostPaperStyled>
 		) : <p>nothing...</p>
 	)
+}
+
+Post.propTypes = {
+	post: PropTypes.object,
+	user: PropTypes.object,
+	showComment: PropTypes.bool,
+	dialog: PropTypes.bool,
+	handleClosePostDialog: PropTypes.func
+}
+
+Post.defaultProps = {
+	showComment: false,
+	dialog: false
 }
 
 export default memo(Post);

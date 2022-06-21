@@ -76,7 +76,7 @@ const Profile = () => {
 			<Container maxWidth="md">
 				{!loadingData ? (
 					<Paper elevation={3} sx={{ marginBottom: 3 }}>
-						<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 }}>
+						<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3, paddingTop: 2 }}>
 							<ProfileImgWrapper>
 								<ProfileImg className={isCurrentUser ? loadingProfilePicture && previewProfileImage ? "preview" : "" : ""}>
 									{loadingProfilePicture && previewProfileImage ? (

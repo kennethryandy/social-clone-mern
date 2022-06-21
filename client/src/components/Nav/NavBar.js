@@ -18,7 +18,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import MoreIcon from '@mui/icons-material/MoreVert';
+import MenuIcon from '@mui/icons-material/Menu';
 import LightModeIcon from '@mui/icons-material/LightMode';
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -28,11 +28,13 @@ import { deleteNotification, logoutUser, readNotifications } from '../../feature
 // Styles
 import { Search, SearchIconWrapper, StyledInputBase, Banner, ProfileBtn, NotificationMessage, NotificationMenu, NotificationMenuContainer } from './NavBarStyles';
 import DeleteNotif from '../Modal/DeleteNotif';
+import MobileDrawer from '../Drawer/MobileDrawer';
 
 dayjs.extend(relativeTime);
 
 const NavBar = ({ handleThemeChange, mode }) => {
 	const dispatch = useDispatch();
+	const [openDrawer, setOpenDrawer] = useState(false);
 	const [openDeleteModal, setDeleteModal] = useState(false);
 	const [notifId, setNotifId] = useState("");
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
@@ -106,14 +108,14 @@ const NavBar = ({ handleThemeChange, mode }) => {
 				</IconButton>
 				<p>Profile</p>
 			</MenuItem>
-			<MenuItem sx={{ display: { sm: 'inline-flex', md: 'none' } }}>
+			<MenuItem sx={{ display: { sm: 'inline-flex', md: 'none' } }} onClick={handleThemeChange}>
 				<IconButton
 					size="large"
 					onClick={handleThemeChange}
 					color="inherit">
 					{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
 				</IconButton>
-				{mode === 'light' ? <p>Light mode</p> : <p>Dark mode</p>}
+				{mode === 'light' ? <p>Dark mode</p> : <p>Light mode</p>}
 			</MenuItem>
 			<MenuItem
 				onClick={() => {
@@ -178,11 +180,29 @@ const NavBar = ({ handleThemeChange, mode }) => {
 		</NotificationMenuContainer>
 	);
 
+	const handleOpenDrawer = () => {
+		setOpenDrawer(true);
+	}
+
+	const handleCloseDrawer = () => {
+		setOpenDrawer(false);
+	}
 
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static">
 				<Toolbar>
+					<IconButton
+						size="large"
+						edge="start"
+						color="inherit"
+						aria-label="menu"
+						sx={{ mr: 2 }}
+						onClick={handleOpenDrawer}
+					>
+						<MenuIcon />
+					</IconButton>
+
 					<Banner
 						variant="h6"
 						noWrap
@@ -209,7 +229,22 @@ const NavBar = ({ handleThemeChange, mode }) => {
 								<ProfileBtn component={Link} to="/profile" variant="contained" disableElevation color="info" startIcon={<Avatar sx={{ width: 24, height: 24 }} src={credentials?.img || noMan}>{credentials.fullname[0]}</Avatar>}>
 									{credentials.fullname}
 								</ProfileBtn>
-								<Avatar component={Link} to="/profile" sx={{ width: 24, height: 24, display: { sm: 'flex', md: 'none' } }}>{credentials.fullname[0]}</Avatar>
+								<Avatar component={Link} to="/profile" sx={{ width: 24, height: 24, display: { sm: 'flex', md: 'none' }, textDecoration: 'none', marginX: 1 }} src={credentials.img || noMan}>{credentials.fullname[0]}</Avatar>
+								<IconButton
+									size="large"
+									aria-label="notifications"
+									color="inherit"
+									onClick={handleNotificationOpen}
+									aria-haspopup="true"
+									aria-controls="primary-notification-dropdown"
+								>
+									{notifications.length > 0 ?
+										<Badge sx={{ display: { sm: 'flex', md: 'none' } }} badgeContent={notifications.filter(notif => !notif.read).length} color="error">
+											<NotificationsIcon />
+										</Badge>
+										: <NotificationsIcon sx={{ display: { sm: 'flex', md: 'none' } }} />
+									}
+								</IconButton>
 								<IconButton
 									size="large"
 									color="inherit"
@@ -256,16 +291,31 @@ const NavBar = ({ handleThemeChange, mode }) => {
 									onClick={handleMobileMenuOpen}
 									color="inherit"
 								>
-									<MoreIcon />
+									<ArrowDropDownIcon />
 								</IconButton>
 							</Box>
 						</>
-					) : null}
+					) : (
+						<>
+							<Box sx={{ flexGrow: 1 }} />
+							<Box>
+								<IconButton
+									size="large"
+									color="inherit"
+									onClick={handleThemeChange}
+									sx={{ display: { sm: 'none', md: 'inline-flex' } }}
+								>
+									{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+								</IconButton>
+							</Box>
+						</>
+					)}
 				</Toolbar>
 			</AppBar>
 			{renderNotificationDropdown}
 			{renderDropdownOption}
 			<DeleteNotif open={openDeleteModal} handleClose={handleCloseDeleteModal} id={notifId} deleteNotif={deleteNotif} />
+			<MobileDrawer openDrawer={openDrawer} handleCloseDrawer={handleCloseDrawer} />
 		</Box>
 	)
 }

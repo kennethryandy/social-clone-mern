@@ -28,7 +28,7 @@ const AddPost = ({ user, loading }) => {
 			<CardContent>
 				<StyledInput onChange={(e) => setPostInput(e.target.value)} value={postInput} placeholder={`What's on your mind, ${user.fullname.split(' ')[0]}?`} rows="2" />
 			</CardContent>
-			<CardActions>
+			<CardActions sx={{ padding: 2 }}>
 				<AddPostButton disabled={loading} onClick={handlePostSubmit} size="medium" fullWidth variant="contained">Post</AddPostButton>
 			</CardActions>
 		</Card >

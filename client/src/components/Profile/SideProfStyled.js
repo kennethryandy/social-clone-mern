@@ -22,8 +22,8 @@ export const ProfileImgWrapper = styled(Box)(({ theme }) => ({
 export const ProfileImg = styled(Button)(({ theme }) => ({
 	borderRadius: "50%",
 	overflow: "hidden",
-	maxHeight: "240px",
-	maxWidth: "240px",
+	maxHeight: 240,
+	maxWidth: 240,
 	width: "100%",
 	height: "100%",
 	"&.preview": {
@@ -44,6 +44,13 @@ export const ProfileImg = styled(Button)(({ theme }) => ({
 			userSelect: "none",
 			pointerEvents: "none",
 			cursor: "default"
+		}
+	},
+	[theme.breakpoints.down('md')]: {
+		maxWidth: 160,
+		maxHeight: 160,
+		"& img": {
+			minWidth: 160
 		}
 	}
 }));

@@ -62,9 +62,6 @@ const lightTheme = {
 
 function App () {
 	const [theme, setTheme] = useLocalStorage('mode', lightTheme);
-	// const [theme, setTheme] = useState(lightTheme);
-
-	console.log(responsiveFontSizes(createTheme(theme)));
 
 	useEffect(() => {
 		const body = document.body;

@@ -36,7 +36,6 @@ export const StyledInput = styled('textarea')(({ theme }) => ({
 }));
 
 export const StyledPostButton = styled(Button)(({ theme }) => ({
-	// color: theme.palette.primary.light
 	color: theme.palette.grey.A700,
 	"&.active": {
 		color: theme.palette.mode === "dark" ? theme.palette.neutral.light : theme.palette.primary.main

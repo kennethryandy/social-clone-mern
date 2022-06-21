@@ -39,10 +39,10 @@ const Home = () => {
 		<>
 			<Container maxWidth="lg">
 				<Grid container spacing={3}>
-					<Grid item md={4}>
+					<Grid item md={4} sx={{ display: { xs: "none", sm: "none", md: "block" }, width: "100%" }}>
 						{!postLoading ? <Paper elevation={2}><SideProfile /></Paper> : <ProfileSkeleton />}
 					</Grid>
-					<Grid item md={8}>
+					<Grid item md={8} sm={12} sx={{ width: "100%" }}>
 						{!postLoading ? <Posts /> : <PostSkeleton />}
 					</Grid>
 				</Grid>

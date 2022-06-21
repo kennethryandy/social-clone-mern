@@ -1,5 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import CardContent from '@mui/material/CardContent';
 
 export const StyledCommentInput = styled('input')(({ theme }) => ({
 	...theme.typography.body1,
@@ -35,7 +36,7 @@ export const CommentWrapper = styled(Box)(({ theme }) => ({
 	gap: theme.spacing(2)
 }));
 
-export const CommentMessage = styled(Box)(({ theme }) => ({
+export const CommentMessage = styled(CardContent)(({ theme }) => ({
 	backgroundColor: theme.palette.mode === "dark" ? "#3A3B3C" : theme.palette.grey.A100,
 	padding: `${theme.spacing(1)} 12px`,
 	borderRadius: 18,
@@ -43,5 +44,9 @@ export const CommentMessage = styled(Box)(({ theme }) => ({
 		color: "inherit",
 		fontWeight: 600,
 		textDecoration: "none"
+	},
+	"& p": {
+		wordBreak: "break-all",
+		whiteSpace: "normal",
 	}
 }));

@@ -135,10 +135,16 @@ const Login = () => {
 								fullWidth
 								disabled={loading}
 								endIcon={loading ? <CircularProgress color="info" size="1em" /> : <SendIcon />}
+								sx={{
+									backgroundColor: theme => theme.palette.mode === "dark" ? theme.palette.neutral.light : theme.palette.primary.main,
+									"&:hover": {
+										backgroundColor: theme => theme.palette.mode === "dark" ? theme.palette.neutral.main : theme.palette.primary.dark
+									}
+								}}
 							>
 								Login
 							</Button>
-							<Typography component="div" sx={{ marginY: 1 }} variant="caption" textAlign="center">
+							<Typography component="div" sx={{ marginY: 1, color: theme => theme.palette.text.primary }} variant="caption" textAlign="center">
 								<span>Don't have an account? Register </span>
 								<MuiLink color="secondary" component={Link} to="/register" sx={{ display: "flex", alignItems: "center", justifyContent: "center" }}>here <ExitToAppIcon sx={{ marginX: "2px" }} /></MuiLink>
 							</Typography>
