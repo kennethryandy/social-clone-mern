@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles'
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-
+import useLocalStorage from './hooks/useLocalStorage';
 // Components
 import NavBar from "./components/Nav/NavBar";
 import AuthService from './components/AuthService';
@@ -13,26 +13,35 @@ import Login from './pages/Login';
 import Home from './pages/Home';
 import Profile from './components/Profile/Profile';
 
-// const darkTheme = {
-// 	palette: {
-// 		mode: "dark",
-// 		primary: {
-// 			light: "#272b31",
-// 			main: "#393e46",
-// 			dark: "#60646b",
-// 			contrastText: "#fff",
-// 		},
-// 		secondary: {
-// 			light: "#a6a6a6",
-// 			main: "#eeeeee",
-// 			dark: "#f1f1f1",
-// 			contrastText: "#000",
-// 		},
-// 		background: {
-// 			paper: "#424242"
-// 		}
-// 	},
-// };
+const darkTheme = {
+	palette: {
+		mode: "dark",
+		primary: {
+			// light: "#B0B3B8",
+			light: "#272b31",
+			main: "#B0B3B8",
+			// main: "#393e46",
+			dark: "#60646b",
+			contrastText: "#fff",
+		},
+		secondary: {
+			light: "#a6a6a6",
+			main: "#eeeeee",
+			dark: "#f1f1f1",
+			contrastText: "#000",
+		},
+		neutral: {
+			light: '#4e96b0',
+			main: '#227c9d',
+			dark: '#17566d',
+			contrastText: '#e9ebee',
+		},
+		background: {
+			// paper: "#424242"
+			paper: "#18191A"
+		}
+	},
+};
 const lightTheme = {
 	palette: {
 		mode: "light",
@@ -52,12 +61,34 @@ const lightTheme = {
 };
 
 function App () {
-	const [theme, setTheme] = useState(lightTheme);
-	console.log(createTheme(theme));
+	const [theme, setTheme] = useLocalStorage('mode', lightTheme);
+	// const [theme, setTheme] = useState(lightTheme);
+
+	console.log(responsiveFontSizes(createTheme(theme)));
+
+	useEffect(() => {
+		const body = document.body;
+		if (body.classList.contains("dark") && theme.palette.mode !== "dark") {
+			body.classList.remove("dark");
+		} else {
+			body.classList.add("dark");
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [])
+
+	const handleThemeChange = () => {
+		const body = document.body;
+		setTheme(currentTheme => currentTheme.palette.mode === "dark" ? lightTheme : darkTheme);
+		if (body.classList.contains("dark") && theme.palette.mode === "dark") {
+			return body.classList.remove("dark");
+		}
+		return body.classList.add("dark");
+	}
+
 	return (
 		<ThemeProvider theme={responsiveFontSizes(createTheme(theme))}>
 			<BrowserRouter>
-				<NavBar />
+				<NavBar handleThemeChange={handleThemeChange} mode={theme.palette.mode} />
 				<AppBarSpacer />
 				<Routes>
 					<Route path="/" index element={<ProtectedRoute><Home /></ProtectedRoute>} />

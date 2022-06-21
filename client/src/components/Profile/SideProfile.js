@@ -7,7 +7,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
-import Paper from '@mui/material/Paper';
 import noMan from '../../assets/image/no-man.jpg';
 // MUI ICONS
 import EditIcon from '@mui/icons-material/Edit';
@@ -20,8 +19,11 @@ import { ProfileImg, UserDetail } from './SideProfStyled';
 const SideProfile = () => {
 	const { credentials } = useSelector(store => store.user);
 	return (
-		<Paper elevation={3}>
-			<Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3 }}>
+		<>
+			<Box sx={{
+				display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 3,
+				paddingTop: 2
+			}}>
 				<ProfileImg component={Link} to="/profile">
 					<img src={credentials.img || noMan} alt={credentials.fullname} />
 				</ProfileImg>
@@ -70,7 +72,7 @@ const SideProfile = () => {
 					</ListItem>
 				)}
 			</List>
-		</Paper>
+		</>
 	)
 }
 

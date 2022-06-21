@@ -31,7 +31,7 @@ import DeleteNotif from '../Modal/DeleteNotif';
 
 dayjs.extend(relativeTime);
 
-const NavBar = ({ darkMode }) => {
+const NavBar = ({ handleThemeChange, mode }) => {
 	const dispatch = useDispatch();
 	const [openDeleteModal, setDeleteModal] = useState(false);
 	const [notifId, setNotifId] = useState("");
@@ -109,10 +109,11 @@ const NavBar = ({ darkMode }) => {
 			<MenuItem sx={{ display: { sm: 'inline-flex', md: 'none' } }}>
 				<IconButton
 					size="large"
+					onClick={handleThemeChange}
 					color="inherit">
-					{!darkMode ? <DarkModeIcon /> : <LightModeIcon />}
+					{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
 				</IconButton>
-				{!darkMode ? <p>Light mode</p> : <p>Dark mode</p>}
+				{mode === 'light' ? <p>Light mode</p> : <p>Dark mode</p>}
 			</MenuItem>
 			<MenuItem
 				onClick={() => {
@@ -212,9 +213,10 @@ const NavBar = ({ darkMode }) => {
 								<IconButton
 									size="large"
 									color="inherit"
+									onClick={handleThemeChange}
 									sx={{ display: { sm: 'none', md: 'inline-flex' } }}
 								>
-									{!darkMode ? <DarkModeIcon /> : <LightModeIcon />}
+									{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
 								</IconButton>
 							</Box>
 							<Box sx={{ display: { xs: 'none', md: 'flex' } }}>

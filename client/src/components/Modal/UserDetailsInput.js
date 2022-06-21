@@ -19,7 +19,7 @@ const UpdatedButton = styled(Button)(({ theme }) => ({
 	}
 }));
 
-const UserDetailsInput = ({ open, setOpen, userDetails, setCurrentUser }) => {
+const UserDetailsInput = ({ open, setOpen, userDetails }) => {
 	const dispatch = useDispatch();
 	const { loading, userDetailsUpdated } = useSelector(store => store.user);
 	const [input, setInput] = useState({
@@ -52,10 +52,6 @@ const UserDetailsInput = ({ open, setOpen, userDetails, setCurrentUser }) => {
 	};
 
 	const saveUserDetails = () => {
-		setCurrentUser({
-			...userDetails,
-			...input
-		});
 		dispatch(updateUserDetails(input));
 	};
 

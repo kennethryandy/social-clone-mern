@@ -41,7 +41,7 @@ const Post = ({ post, user, showComment = false }) => {
 
 	return (
 		Object.keys(post).length !== 0 ? (
-			<PostPaperStyled elevation={3}>
+			<PostPaperStyled elevation={2}>
 				<PostCreatorHeaderStyled
 					avatar={
 						<Avatar aria-label="profile-picture" component={Link} to={`/profile/${post.creator._id}`} src={post.creator.img || noMan}>{post.creator.fullname[0]}</Avatar>

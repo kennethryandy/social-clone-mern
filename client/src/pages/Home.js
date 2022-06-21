@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import useSWR from 'swr'
-import axios from '../utils/axiosConfig';
-
+import useFecthData from '../hooks/useFecthData';
+import Paper from '@mui/material/Paper';
 // MUI
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -14,40 +13,37 @@ import { setNotifications } from '../features/user/userSlice';
 import { setPosts, setLoading, setUnloading } from '../features/post/postSlice';
 import SinglePostDialog from '../components/Posts/SinglePostDialog';
 
-const fetcher = (...args) => axios.get(args).then(res => res.data);
-const devOptions = { shouldRetryOnError: true, revalidateOnFocus: true, revalidateOnMount: true };
-
 const Home = () => {
 	const { loading } = useSelector(store => store.post);
-	const { data } = useSWR('http://localhost:5000/api/post/all', fetcher, devOptions);
-	const { data: notifData } = useSWR('http://localhost:5000/api/notification/user', fetcher, devOptions);
+	const { data: postsData, loading: postLoading } = useFecthData('http://localhost:5000/api/post/all');
+	const { data: notifData, loading: loadingNotif } = useFecthData('http://localhost:5000/api/notification/user');
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		if (notifData?.success) {
+		if (notifData?.success && !loadingNotif) {
 			dispatch(setNotifications(notifData.notifications));
 		}
-	}, [dispatch, notifData]);
+	}, [dispatch, notifData, loadingNotif]);
 
 	useEffect(() => {
 		if (!loading) {
 			dispatch(setLoading());
 		}
-		if (data?.posts) {
-			dispatch(setPosts(data.posts));
+		if (!postLoading) {
+			dispatch(setPosts(postsData.posts));
 			dispatch(setUnloading());
 		}
-	}, [loading, data, dispatch]);
+	}, [loading, postsData, dispatch, postLoading]);
 
 	return (
 		<>
 			<Container maxWidth="lg">
 				<Grid container spacing={3}>
 					<Grid item md={4}>
-						{data ? <SideProfile /> : <ProfileSkeleton />}
+						{!postLoading ? <Paper elevation={2}><SideProfile /></Paper> : <ProfileSkeleton />}
 					</Grid>
 					<Grid item md={8}>
-						{data ? <Posts /> : <PostSkeleton />}
+						{!postLoading ? <Posts /> : <PostSkeleton />}
 					</Grid>
 				</Grid>
 			</Container>

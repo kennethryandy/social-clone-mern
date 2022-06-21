@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import useFecthData from '../../hooks/useFecthData';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateProfilePicture, setPreviewProfileImage, setLoading, setUser } from '../../features/user/userSlice';
+import { updateProfilePicture, setPreviewProfileImage, setUser } from '../../features/user/userSlice';
 import { setUserPosts } from '../../features/post/postSlice';
 import UserDetailsInput from '../Modal/UserDetailsInput';
 import Box from '@mui/material/Box';
@@ -33,8 +33,7 @@ const Profile = () => {
 	const dispatch = useDispatch();
 	const [editUserDetail, setEditUserDetail] = useState(false);
 	const { loading: postLoading, userPosts } = useSelector(store => store.post)
-	const { credentials, user, loading: userLoading, loadingProfilePicture, previewProfileImage } = useSelector(store => store.user);
-	const [currentUser, setCurrentUser] = useState(credentials);
+	const { credentials, user, loadingProfilePicture, previewProfileImage } = useSelector(store => store.user);
 	const inputFileRef = useRef(null);
 	const [isCurrentUser, setIsCurrentUser] = useState(true);
 
@@ -48,22 +47,12 @@ const Profile = () => {
 		if (params.id && (credentials.id !== params.id)) {
 			setIsCurrentUser(false);
 		}
+		return () => {
+			dispatch(setUser({}));
+			dispatch(setUserPosts([]));
+		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [data]);
-
-	// useEffect(() => {
-	// 	dispatch(setLoading(true));
-	// 	if (params.id && (credentials.id !== params.id)) {
-	// 		setCurrentUser(user);
-	// 		setIsCurrentUser(false);
-	// 	} else {
-	// 		setCurrentUser(credentials);
-	// 	}
-	// 	const findUserPost = posts.filter(post => post.creator._id === currentUser.id);
-	// 	setUserPost(findUserPost);
-	// 	dispatch(setLoading(false))
-	// 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	// }, [user, credentials]);
 
 
 	const handleProfileEditButtonClick = () => {
@@ -158,7 +147,7 @@ const Profile = () => {
 				) : <PostSkeleton />}
 			</Container>
 
-			<UserDetailsInput open={editUserDetail} setOpen={setEditUserDetail} userDetails={user} setCurrentUser={setCurrentUser} />
+			<UserDetailsInput open={editUserDetail} setOpen={setEditUserDetail} userDetails={user} />
 		</>
 	)
 }

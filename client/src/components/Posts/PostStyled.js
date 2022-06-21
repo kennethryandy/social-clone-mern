@@ -24,16 +24,28 @@ export const PostCreatorHeaderStyled = styled(CardHeader)(({ theme }) => ({
 
 export const StyledInput = styled('textarea')(({ theme }) => ({
 	...theme.typography.h5,
+	boxSizing: "border-box",
 	width: "100%",
 	border: 0,
 	outline: 0,
-	resize: "none"
+	resize: "none",
+	padding: theme.spacing(2),
+	borderRadius: theme.spacing(2),
+	backgroundColor: theme.palette.mode === "dark" ? "#3A3B3C" : "transparent",
+	color: theme.palette.text.primary
 }));
 
 export const StyledPostButton = styled(Button)(({ theme }) => ({
 	// color: theme.palette.primary.light
 	color: theme.palette.grey.A700,
 	"&.active": {
-		color: theme.palette.primary.main
+		color: theme.palette.mode === "dark" ? theme.palette.neutral.light : theme.palette.primary.main
+	}
+}));
+
+export const AddPostButton = styled(Button)(({ theme }) => ({
+	backgroundColor: theme.palette.mode === "dark" ? theme.palette.neutral.light : theme.palette.primary.main,
+	"&:hover": {
+		backgroundColor: theme.palette.mode === "dark" ? theme.palette.neutral.main : theme.palette.primary.dark
 	}
 }));

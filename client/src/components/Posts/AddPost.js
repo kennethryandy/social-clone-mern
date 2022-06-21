@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createPost } from '../../features/post/postSlice';
-import { StyledInput } from './PostStyled';
+import { StyledInput, AddPostButton } from './PostStyled';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
@@ -30,7 +29,7 @@ const AddPost = ({ user, loading }) => {
 				<StyledInput onChange={(e) => setPostInput(e.target.value)} value={postInput} placeholder={`What's on your mind, ${user.fullname.split(' ')[0]}?`} rows="2" />
 			</CardContent>
 			<CardActions>
-				<Button disabled={loading} onClick={handlePostSubmit} size="medium" fullWidth variant="contained">Post</Button>
+				<AddPostButton disabled={loading} onClick={handlePostSubmit} size="medium" fullWidth variant="contained">Post</AddPostButton>
 			</CardActions>
 		</Card >
 	)

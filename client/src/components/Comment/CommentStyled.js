@@ -10,7 +10,8 @@ export const StyledCommentInput = styled('input')(({ theme }) => ({
 	margin: "0 12px",
 	outline: "none",
 	border: "none",
-	backgroundColor: theme.palette.grey.A100
+	backgroundColor: theme.palette.mode === "dark" ? "#3A3B3C" : theme.palette.grey.A100,
+	color: theme.palette.text.primary
 }));
 
 export const CommentInputWrapper = styled('form')(({ theme }) => ({
@@ -35,7 +36,7 @@ export const CommentWrapper = styled(Box)(({ theme }) => ({
 }));
 
 export const CommentMessage = styled(Box)(({ theme }) => ({
-	backgroundColor: theme.palette.grey.A100,
+	backgroundColor: theme.palette.mode === "dark" ? "#3A3B3C" : theme.palette.grey.A100,
 	padding: `${theme.spacing(1)} 12px`,
 	borderRadius: 18,
 	"& .comment_creator": {
