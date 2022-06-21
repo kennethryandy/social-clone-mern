@@ -31,13 +31,27 @@ router.get('/all', isAuth, async (req, res, next) => {
 // Get user by id
 router.get('/:id', async (req, res, next) => {
 	try {
-		const user = await User.findById(req.params.id);
+		const creatorKeys = ['_id', 'fullname', 'email', 'img'];
+		const user = await User.findById(req.params.id).populate({
+			path: 'posts',
+			populate: [
+				{
+					path: 'creator',
+					select: creatorKeys
+				},
+				{
+					path: 'comments likes',
+					populate: {
+						path: 'creator',
+						select: creatorKeys
+					}
+				}
+			],
+			options: { sort: '-createdAt' }
+		});
 		return res.json({
 			success: 1,
-			user: {
-				...user._doc,
-				id: user._id
-			}
+			user
 		});
 	} catch (error) {
 		next(error);

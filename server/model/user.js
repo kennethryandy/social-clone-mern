@@ -16,6 +16,7 @@ const userSchema = new Schema({
 		min: 6,
 		required: true
 	},
+	posts: [{ type: Schema.Types.ObjectId, ref: 'Post', required: true }],
 	img: String,
 	bio: String,
 	website: String,

@@ -1,5 +1,6 @@
 const isAuth = require('../middleware/isAuth');
 const Post = require('../model/post');
+const User = require('../model/user');
 const router = require('express').Router();
 
 
@@ -21,6 +22,19 @@ router.get('/all', isAuth, async (req, res, next) => {
 	}
 });
 
+// Get all posts by user id
+router.get('/user/:userId', isAuth, async (req, res, next) => {
+	try {
+		const userPosts = await Post.find({ creator: req.params.userId });
+		if (!userPosts) {
+			return res.status(404).json({ message: 'User post not found', success: 0 });
+		}
+		return res.json({ message: 'User post found', success: 1, posts: userPosts });
+	} catch (err) {
+		next(err);
+	}
+});
+
 // Create post
 router.post('/add', isAuth, async (req, res, next) => {
 	try {
@@ -29,6 +43,9 @@ router.post('/add', isAuth, async (req, res, next) => {
 			type: "text",
 			creator: req.user.id
 		});
+		const appendPostToUser = await User.findById(req.user.id);
+		appendPostToUser.posts.push(newPost);
+		await appendPostToUser.save();
 		await newPost.save();
 		return res.status(201).json({
 			message: "Posted",
