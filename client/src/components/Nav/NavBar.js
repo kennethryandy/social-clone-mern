@@ -150,24 +150,30 @@ const NavBar = ({ darkMode }) => {
 			open={isNotificationsOpen}
 			onClose={handleNotificationClose}
 		>
-			{notifications.map(notification => (
-				<NotificationMenu component={Link} to={`/post/${notification.post}`} key={notification._id} className={notification.read ? "" : "unread"}>
-					<NotificationMessage
-						avatar={
-							<Avatar src={notification.sender.img}>
-								{credentials.fullname[0]}
-							</Avatar>
-						}
-						action={
-							<IconButton aria-label="delete" onClick={() => handleOpenDeleteModal(notification._id)}>
-								<DeleteIcon />
-							</IconButton>
-						}
-						title={`${notification.sender.fullname} ${notification.type === "comment" ? notification.type + "e" : notification.type}d your post.`}
-						subheader={dayjs(notification.createdAt).fromNow()}
-					/>
-				</NotificationMenu>
-			))}
+			{notifications.length > 0 ? (
+				notifications.map(notification => (
+					<NotificationMenu component={Link} to={`/post/${notification.post}`} key={notification._id} className={notification.read ? "" : "unread"}>
+						<NotificationMessage
+							avatar={
+								<Avatar src={notification.sender.img}>
+									{notification.sender.fullname[0]}
+								</Avatar>
+							}
+							action={
+								<IconButton aria-label="delete" onClick={() => handleOpenDeleteModal(notification._id)}>
+									<DeleteIcon />
+								</IconButton>
+							}
+							title={`${notification.sender.fullname} ${notification.type === "comment" ? notification.type + "e" : notification.type}d your post.`}
+							subheader={dayjs(notification.createdAt).fromNow()}
+						/>
+					</NotificationMenu>
+				))
+			) : (
+				<MenuItem disabled>
+					<MenuItem>No message notification!</MenuItem>
+				</MenuItem>
+			)}
 		</NotificationMenuContainer>
 	);
 
