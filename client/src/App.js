@@ -65,7 +65,9 @@ function App () {
 
 	useEffect(() => {
 		const body = document.body;
-		if (body.classList.contains("dark") && theme.palette.mode !== "dark") {
+		console.log(theme);
+		console.log(body);
+		if (body.classList.contains("dark") && theme.palette.mode === "light") {
 			body.classList.remove("dark");
 		} else {
 			body.classList.add("dark");
