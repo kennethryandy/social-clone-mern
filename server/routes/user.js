@@ -29,11 +29,9 @@ router.get('/all', isAuth, async (req, res, next) => {
 });
 
 // Get user by id
-router.get('/:id', async (req, res, next) => {
+router.get('/:id', isAuth, async (req, res, next) => {
 	try {
 		const creatorKeys = ['_id', 'fullname', 'email', 'img'];
-		const photos = await gfs.files.find();
-		console.log(photos);
 		const user = await User.findById(req.params.id).populate({
 			path: 'posts',
 			populate: [
@@ -68,7 +66,7 @@ router.post('/profile', isAuth, upload.single("file"), async (req, res) => {
 			message: "you must select a file."
 		});
 	};
-	const imgUrl = `http://localhost:5000/file/${req.file.filename}`;
+	const imgUrl = `${process.env.BASE_URL}/file/${req.file.filename}`;
 	await User.findByIdAndUpdate(req.user.id, { img: imgUrl });
 	// await gfs.files.deleteOne({ filename: user.img });
 	return res.status(201).json({

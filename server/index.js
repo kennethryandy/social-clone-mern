@@ -52,7 +52,7 @@ app.use('/api/notification', notification);
 app.get("/file/:filename", async (req, res) => {
 	try {
 		const file = await gfs.files.findOne({ filename: req.params.filename });
-		console.log(file);
+
 		if (!file) {
 			return res.send('noimagefound');
 		}
