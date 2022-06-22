@@ -37,7 +37,7 @@ const Profile = () => {
 	const inputFileRef = useRef(null);
 	const [isCurrentUser, setIsCurrentUser] = useState(true);
 
-	const { data, loading: loadingData } = useFecthData(`http://localhost:5000/api/user/${params?.id || credentials.id}`);
+	const { data, loading: loadingData } = useFecthData(`https://social-clone-api-v2.herokuapp.com/api/user/${params?.id || credentials.id}`);
 
 	useEffect(() => {
 		if (data && data?.success) {

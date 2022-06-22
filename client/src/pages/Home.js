@@ -17,8 +17,8 @@ const Home = () => {
 	const { loading } = useSelector(store => store.post);
 	const { data: postsData, loading: postLoading } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/post/all');
 	const { data: notifData, loading: loadingNotif } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/notification/user');
-	// const { data: postsData, loading: postLoading } = useFecthData('http://localhost:5000/api/post/all');
-	// const { data: notifData, loading: loadingNotif } = useFecthData('http://localhost:5000/api/notification/user');
+	// const { data: postsData, loading: postLoading } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/post/all');
+	// const { data: notifData, loading: loadingNotif } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/notification/user');
 	const dispatch = useDispatch();
 
 	useEffect(() => {
