@@ -64,13 +64,8 @@ function App () {
 	const [theme, setTheme] = useLocalStorage('mode', lightTheme);
 
 	useEffect(() => {
-		const body = document.body;
-		console.log(theme);
-		console.log(body);
-		if (body.classList.contains("dark") && theme.palette.mode === "light") {
-			body.classList.remove("dark");
-		} else {
-			body.classList.add("dark");
+		if (theme.palette.mode === "dark") {
+			document.body.classList.add("dark");
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
