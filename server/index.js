@@ -17,7 +17,7 @@ app.use(cors());
 app.use(morgan("dev"));
 
 try {
-	mongoose.connect(process.env.DATABASE_URI);
+	mongoose.connect(process.env.NODE_ENV === 'production' ? process.env.DATABASE_URI : process.env.DATABASE_URI_LOCAL);
 	// { userNewUrlParse: true, useCreateIndex: true, useUnifiedTopology: true }
 	console.log('Database connected');
 
@@ -52,9 +52,13 @@ app.use('/api/notification', notification);
 app.get("/file/:filename", async (req, res) => {
 	try {
 		const file = await gfs.files.findOne({ filename: req.params.filename });
-		// const readStream = gfs.createReadStream(file.filename);
+		console.log(file);
+		if (!file) {
+			return res.send('noimagefound');
+		}
 		const readStream = gridfsBucket.openDownloadStream(file._id);
 		readStream.pipe(res);
+		// const readStream = gfs.createReadStream(file.filename);
 	} catch (error) {
 		console.log(error);
 		res.send("not found");

@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const Grid = require("gridfs-stream");
+// const mongoose = require('mongoose');
+// const Grid = require("gridfs-stream");
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -8,12 +8,12 @@ const isAuth = require('../middleware/isAuth');
 const upload = require('../middleware/upload');
 const { reduceUserDetails } = require('../utils/validators');
 
-let gfs;
-const conn = mongoose.connection;
-conn.once("open", function () {
-	gfs = Grid(conn.db, mongoose.mongo);
-	gfs.collection('photos');
-});
+// let gfs;
+// const conn = mongoose.connection;
+// conn.once("open", function () {
+// 	gfs = Grid(conn.db, mongoose.mongo);
+// 	gfs.collection('photos');
+// });
 
 // Get all user
 router.get('/all', isAuth, async (req, res, next) => {
@@ -32,6 +32,8 @@ router.get('/all', isAuth, async (req, res, next) => {
 router.get('/:id', async (req, res, next) => {
 	try {
 		const creatorKeys = ['_id', 'fullname', 'email', 'img'];
+		const photos = await gfs.files.find();
+		console.log(photos);
 		const user = await User.findById(req.params.id).populate({
 			path: 'posts',
 			populate: [
@@ -67,8 +69,8 @@ router.post('/profile', isAuth, upload.single("file"), async (req, res) => {
 		});
 	};
 	const imgUrl = `http://localhost:5000/file/${req.file.filename}`;
-	const user = await User.findByIdAndUpdate(req.user.id, { img: imgUrl });
-	await gfs.files.deleteOne({ filename: user.img });
+	await User.findByIdAndUpdate(req.user.id, { img: imgUrl });
+	// await gfs.files.deleteOne({ filename: user.img });
 	return res.status(201).json({
 		success: 1,
 		imgUrl

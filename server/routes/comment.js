@@ -26,7 +26,6 @@ router.post('/add', isAuth, async (req, res, next) => {
 		await post.save();
 		await newComment.save();
 		// Add notification to the user
-		console.log(req.user, post.creator.toString());
 		if (req.user.id !== post.creator.toString()) {
 			const notification = new Notification({
 				recipient: post.creator._id,
