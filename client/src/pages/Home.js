@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import useFecthData from '../hooks/useFecthData';
+import { baseURL } from '../utils/axiosConfig';
 import Paper from '@mui/material/Paper';
 // MUI
 import Container from '@mui/material/Container';
@@ -15,10 +16,8 @@ import SinglePostDialog from '../components/Posts/SinglePostDialog';
 
 const Home = () => {
 	const { loading } = useSelector(store => store.post);
-	const { data: postsData, loading: postLoading } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/post/all');
-	const { data: notifData, loading: loadingNotif } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/notification/user');
-	// const { data: postsData, loading: postLoading } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/post/all');
-	// const { data: notifData, loading: loadingNotif } = useFecthData('https://social-clone-api-v2.herokuapp.com/api/notification/user');
+	const { data: postsData, loading: postLoading } = useFecthData(`${baseURL}/post/all`);
+	const { data: notifData, loading: loadingNotif } = useFecthData(`${baseURL}/notification/user`);
 	const dispatch = useDispatch();
 
 	useEffect(() => {

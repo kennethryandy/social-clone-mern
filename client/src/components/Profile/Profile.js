@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import useFecthData from '../../hooks/useFecthData';
+import { baseURL } from '../../utils/axiosConfig';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateProfilePicture, setPreviewProfileImage, setUser } from '../../features/user/userSlice';
@@ -37,7 +38,7 @@ const Profile = () => {
 	const inputFileRef = useRef(null);
 	const [isCurrentUser, setIsCurrentUser] = useState(true);
 
-	const { data, loading: loadingData } = useFecthData(`https://social-clone-api-v2.herokuapp.com/api/user/${params?.id || credentials.id}`);
+	const { data, loading: loadingData } = useFecthData(`${baseURL}/user/${params?.id || credentials.id}`);
 
 	useEffect(() => {
 		if (data && data?.success) {
@@ -80,9 +81,9 @@ const Profile = () => {
 							<ProfileImgWrapper>
 								<ProfileImg className={isCurrentUser ? loadingProfilePicture && previewProfileImage ? "preview" : "" : ""}>
 									{loadingProfilePicture && previewProfileImage ? (
-										<img className="preview-profile-image" src={previewProfileImage} alt={user.fullname} />
+										<img loading="lazy" className="preview-profile-image" src={previewProfileImage} alt={user.fullname} />
 									) : (
-										<img src={user.img || noMan} alt={user.fullname} />
+										<img loading="lazy" src={user.img || noMan} alt={user.fullname} />
 									)}
 								</ProfileImg>
 								{isCurrentUser &&
@@ -119,7 +120,7 @@ const Profile = () => {
 									<ListItemIcon>
 										<LanguageIcon />
 									</ListItemIcon>
-									<UserDetail className="user-details" primary={user.website} />
+									<UserDetail className="user-details" primary={<Typography component="a" href={user.website} target="_blank" variant="body1">{user.website}</Typography>} />
 								</ListItem>
 							)}
 							{isCurrentUser && (

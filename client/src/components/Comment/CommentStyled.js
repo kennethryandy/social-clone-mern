@@ -23,6 +23,9 @@ export const CommentInputWrapper = styled('form')(({ theme }) => ({
 		position: "absolute",
 		right: 12,
 		top: 0,
+		"&.emoji": {
+			right: 48
+		},
 		"&:hover": {
 			backgroundColor: "transparent",
 		}

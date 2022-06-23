@@ -4,6 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 
 const Comment = ({ comment }) => {
+
 	return (
 		<CommentWrapper>
 			<Avatar aria-label="profile-picture" src={comment.creator.img} component={Link} to={`/profile/${comment.creator._id}`} />

@@ -1,7 +1,7 @@
 import { useState, memo } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { likePost, unlikePost } from '../../features/post/postSlice';
 import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton } from './PostStyled';
 import noMan from '../../assets/image/no-man.jpg';
@@ -21,11 +21,13 @@ import CommentIcon from '@mui/icons-material/Comment';
 import CloseIcon from '@mui/icons-material/Close';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
+import LikeTooltip from '../UI/LikeTooltip';
 
 dayjs.extend(relativeTime);
 
 const Post = ({ post, user, showComment, dialog, handleClosePostDialog }) => {
 	const dispatch = useDispatch();
+	const { credentials } = useSelector(store => store.user);
 	const [openComment, setOpenComment] = useState(showComment);
 
 	const commentClickHandler = () => {
@@ -46,7 +48,7 @@ const Post = ({ post, user, showComment, dialog, handleClosePostDialog }) => {
 			<PostPaperStyled elevation={2}>
 				<PostCreatorHeaderStyled
 					avatar={
-						<Avatar aria-label="profile-picture" component={Link} to={`/profile/${post.creator._id}`} src={post.creator.img || noMan}>{post.creator.fullname[0]}</Avatar>
+						<Avatar aria-label="profile-picture" component={Link} to={`/profile/${post.creator._id}`} src={post.creator.img || noMan} alt={post.creator.fullname}>{post.creator.fullname[0]}</Avatar>
 					}
 					action={
 						<IconButton aria-label="settings" onClick={dialog ? handleClosePostDialog : () => null}>
@@ -63,14 +65,16 @@ const Post = ({ post, user, showComment, dialog, handleClosePostDialog }) => {
 				</CardContent>
 				<Divider />
 				<CardActions>
-					<StyledPostButton
-						size="small"
-						startIcon={<Badge badgeContent={post.likes.length > 0 ? post.likes.length : null}><ThumbUpIcon color="inherit" /></Badge>}
-						onClick={likeUnlikePost}
-						className={post.likes.findIndex(like => like.creator._id === user.id) !== -1 ? "active" : ""}
-					>
-						Like
-					</StyledPostButton>
+					<LikeTooltip likes={post.likes} userId={credentials.id}>
+						<StyledPostButton
+							size="small"
+							startIcon={<Badge badgeContent={post.likes.length > 0 ? post.likes.length : null}><ThumbUpIcon color="inherit" /></Badge>}
+							onClick={likeUnlikePost}
+							className={post.likes.findIndex(like => like.creator._id === user.id) !== -1 ? "active" : ""}
+						>
+							Like
+						</StyledPostButton>
+					</LikeTooltip>
 					<StyledPostButton
 						size="small"
 						startIcon={<Badge badgeContent={post.comments.length > 0 ? post.comments.length : null}><CommentIcon color="inherit" /></Badge>}

@@ -58,7 +58,11 @@ export const ProfileImg = styled(Button)(({ theme }) => ({
 export const UserDetail = styled(ListItemText)(({ theme }) => ({
 	textAlign: "center",
 	"&.user-details": {
-		textAlign: "left"
+		textAlign: "left",
+		"& a": {
+			textDecoration: "none",
+			color: "inherit",
+		}
 	},
 	"& .MuiTypography-root": {
 		fontWeight: 500,

@@ -7,6 +7,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 import noMan from '../../assets/image/no-man.jpg';
 // MUI ICONS
 import EditIcon from '@mui/icons-material/Edit';
@@ -25,7 +26,7 @@ const SideProfile = () => {
 				paddingTop: 2
 			}}>
 				<ProfileImg component={Link} to="/profile">
-					<img src={credentials.img || noMan} alt={credentials.fullname} />
+					<img loading="lazy" src={credentials.img || noMan} alt={credentials.fullname} />
 				</ProfileImg>
 			</Box>
 			<List>
@@ -58,7 +59,7 @@ const SideProfile = () => {
 						<ListItemIcon>
 							<LanguageIcon />
 						</ListItemIcon>
-						<UserDetail className="user-details" primary={credentials.website} />
+						<UserDetail className="user-details" primary={<Typography variant="body1" component="a" href={credentials.website} target="_blank">{credentials.website}</Typography>} />
 					</ListItem>
 				)}
 				{(!credentials.bio && !credentials.location && !credentials.website) && (

@@ -2,13 +2,15 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
 
 export const PostPaperStyled = styled(Card)(({ theme }) => ({
 	width: "100%",
 	borderRadius: "max(0px, min(8px, calc((100vw - 4px - 100%) * 9999))) / 8px",
 	boxSizing: "border-box",
 	padding: theme.spacing(2),
-	marginBottom: theme.spacing(3)
+	marginBottom: theme.spacing(3),
+	overflow: "visible"
 }))
 
 export const PostCreatorHeaderStyled = styled(CardHeader)(({ theme }) => ({
@@ -21,6 +23,20 @@ export const PostCreatorHeaderStyled = styled(CardHeader)(({ theme }) => ({
 		}
 	}
 }));
+
+export const AddPostInputWrapper = styled(CardContent)`
+	position: relative;
+	& .emoji {
+		position: absolute;
+		top: 50%;
+		right: 24px;
+		transform: translateY(-50%);
+		display: none;
+		&.show {
+			display: inline-flex;
+		}
+	}
+`;
 
 export const StyledInput = styled('textarea')(({ theme }) => ({
 	...theme.typography.h5,
