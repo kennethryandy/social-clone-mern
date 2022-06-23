@@ -1,4 +1,5 @@
 const isAuth = require('../middleware/isAuth');
+const upload = require('../middleware/upload');
 const Post = require('../model/post');
 const User = require('../model/user');
 const router = require('express').Router();
@@ -36,13 +37,17 @@ router.get('/user/:userId', isAuth, async (req, res, next) => {
 });
 
 // Create post
-router.post('/add', isAuth, async (req, res, next) => {
+router.post('/add', isAuth, upload.single('file'), async (req, res, next) => {
 	try {
-		const newPost = new Post({
+		const newPostObj = {
 			content: req.body.content,
 			type: "text",
 			creator: req.user.id
-		});
+		};
+		if (req.file) {
+			newPostObj.imgUrl = `${process.env.BASE_URL}/file/${req.file.filename}`;
+		}
+		const newPost = new Post(newPostObj);
 		const appendPostToUser = await User.findById(req.user.id);
 		appendPostToUser.posts.push(newPost);
 		await appendPostToUser.save();

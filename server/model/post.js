@@ -9,6 +9,7 @@ const postScema = new Schema({
 		type: String
 	},
 	type: String,
+	imgUrl: String,
 	creator: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',
