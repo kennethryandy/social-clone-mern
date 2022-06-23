@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'
+import { useState, memo, useRef } from 'react'
 import { Link } from 'react-router-dom';
 import noMan from '../../assets/image/no-man.jpg';
 import dayjs from 'dayjs';
@@ -14,7 +14,6 @@ import MenuItem from '@mui/material/MenuItem';
 // import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import DeleteIcon from '@mui/icons-material/Delete';
 import LogoutIcon from '@mui/icons-material/Logout';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -26,9 +25,10 @@ import { useSelector, useDispatch } from 'react-redux';
 import { deleteNotification, logoutUser, readNotifications } from '../../features/user/userSlice'
 
 // Styles
-import { Search, SearchIconWrapper, StyledInputBase, Banner, ProfileBtn, NotificationMessage, NotificationMenu, NotificationMenuContainer } from './NavBarStyles';
+import { Search, SearchIconWrapper, StyledInputBase, Banner, ProfileBtn, Offset } from './NavBarStyles';
 import DeleteNotif from '../Modal/DeleteNotif';
 import MobileDrawer from '../Drawer/MobileDrawer';
+import NotificationMenu from '../UI/NotificationMenu';
 
 dayjs.extend(relativeTime);
 
@@ -38,11 +38,11 @@ const NavBar = ({ handleThemeChange, mode }) => {
 	const [openDeleteModal, setDeleteModal] = useState(false);
 	const [notifId, setNotifId] = useState("");
 	const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
-	const [notificationAnchorEl, setNotificationAnchorEl] = useState(null)
+	const [openNotif, setOpenNotif] = useState(false);
+	const notificationAnchorEl = useRef(null);
 	const { authenticated, notifications, credentials } = useSelector(store => store.user);
 
 	const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-	const isNotificationsOpen = Boolean(notificationAnchorEl);
 
 	const handleMobileMenuClose = () => {
 		setMobileMoreAnchorEl(null);
@@ -51,18 +51,6 @@ const NavBar = ({ handleThemeChange, mode }) => {
 	const handleMobileMenuOpen = (event) => {
 		setMobileMoreAnchorEl(event.currentTarget);
 	};
-
-	const handleNotificationOpen = e => {
-		setNotificationAnchorEl(e.currentTarget);
-	}
-
-	const handleNotificationClose = () => {
-		setNotificationAnchorEl(null);
-		const unredNotifications = notifications.filter(notification => !notification.read).map(notification => notification._id);
-		if (unredNotifications.length > 0) {
-			dispatch(readNotifications({ ids: unredNotifications }));
-		}
-	}
 
 	const deleteNotif = () => {
 		dispatch(deleteNotification(notifId));
@@ -79,6 +67,24 @@ const NavBar = ({ handleThemeChange, mode }) => {
 		setNotifId("");
 		setDeleteModal(false);
 	}
+
+	const handleNotificationToggle = () => {
+		setOpenNotif(prevOpen => !prevOpen);
+	}
+
+	const handleCloseNotification = (event) => {
+		const unredNotifications = notifications.filter(notification => !notification.read).map(notification => notification._id);
+		if (unredNotifications.length > 0) {
+			dispatch(readNotifications({ ids: unredNotifications }));
+		}
+
+		if (notificationAnchorEl.current && notificationAnchorEl.current.contains(event.target)) {
+			return;
+		}
+
+		setOpenNotif(false);
+	};
+
 
 	const renderDropdownOption = (
 		<Menu
@@ -137,49 +143,6 @@ const NavBar = ({ handleThemeChange, mode }) => {
 		</Menu>
 	);
 
-	const renderNotificationDropdown = (
-		<NotificationMenuContainer
-			anchorEl={notificationAnchorEl}
-			anchorOrigin={{
-				vertical: 'bottom',
-				horizontal: 'right',
-			}}
-			id="primary-notification-dropdown"
-			keepMounted
-			transformOrigin={{
-				vertical: 'top',
-				horizontal: 'right',
-			}}
-			open={isNotificationsOpen}
-			onClose={handleNotificationClose}
-		>
-			{notifications.length > 0 ? (
-				notifications.map(notification => (
-					<NotificationMenu component={Link} to={`/post/${notification.post}`} key={notification._id} className={notification.read ? "" : "unread"}>
-						<NotificationMessage
-							avatar={
-								<Avatar src={notification.sender.img}>
-									{notification.sender.fullname[0]}
-								</Avatar>
-							}
-							action={
-								<IconButton aria-label="delete" onClick={() => handleOpenDeleteModal(notification._id)}>
-									<DeleteIcon />
-								</IconButton>
-							}
-							title={`${notification.sender.fullname} ${notification.type === "comment" ? notification.type + "e" : notification.type}d your post.`}
-							subheader={dayjs(notification.createdAt).fromNow()}
-						/>
-					</NotificationMenu>
-				))
-			) : (
-				<MenuItem disabled>
-					<MenuItem>No message notification!</MenuItem>
-				</MenuItem>
-			)}
-		</NotificationMenuContainer>
-	);
-
 	const handleOpenDrawer = () => {
 		setOpenDrawer(true);
 	}
@@ -189,134 +152,114 @@ const NavBar = ({ handleThemeChange, mode }) => {
 	}
 
 	return (
-		<Box sx={{ flexGrow: 1 }}>
-			<AppBar position="static">
-				<Toolbar>
-					<IconButton
-						size="large"
-						edge="start"
-						color="inherit"
-						aria-label="menu"
-						sx={{ mr: 2, display: { sm: "inline-flex", md: "none" } }}
-						onClick={handleOpenDrawer}
-					>
-						<MenuIcon />
-					</IconButton>
+		<>
+			<Box sx={{ flexGrow: 1 }}>
+				<AppBar position="fixed">
+					<Toolbar>
+						<IconButton
+							size="large"
+							edge="start"
+							color="inherit"
+							aria-label="menu"
+							sx={{ mr: 2, display: { sm: "inline-flex", md: "none" } }}
+							onClick={handleOpenDrawer}
+						>
+							<MenuIcon />
+						</IconButton>
 
-					<Banner
-						variant="h6"
-						noWrap
-						component={Link}
-						to="/"
-					>
-						SC
-					</Banner>
-					{authenticated ? (
-						<Search>
-							<SearchIconWrapper>
-								<SearchIcon />
-							</SearchIconWrapper>
-							<StyledInputBase
-								placeholder="Search…"
-								inputProps={{ 'aria-label': 'search' }}
-							/>
-						</Search>
-					) : null}
-					{authenticated ? (
-						<>
-							<Box sx={{ flexGrow: 1 }} />
-							<Box sx={{ display: 'flex', alignItems: 'center' }}>
-								<ProfileBtn component={Link} to="/profile" variant="contained" disableElevation color="info" startIcon={<Avatar sx={{ width: 24, height: 24 }} src={credentials?.img || noMan}>{credentials.fullname[0]}</Avatar>}>
-									{credentials.fullname}
-								</ProfileBtn>
-								<Avatar component={Link} to="/profile" sx={{ width: 24, height: 24, display: { sm: 'flex', md: 'none' }, textDecoration: 'none', marginX: 1 }} src={credentials.img || noMan}>{credentials.fullname[0]}</Avatar>
-								<IconButton
-									size="large"
-									aria-label="notifications"
-									color="inherit"
-									onClick={handleNotificationOpen}
-									aria-haspopup="true"
-									aria-controls="primary-notification-dropdown"
-								>
-									{notifications.length > 0 ?
-										<Badge sx={{ display: { sm: 'flex', md: 'none' } }} badgeContent={notifications.filter(notif => !notif.read).length} color="error">
-											<NotificationsIcon />
-										</Badge>
-										: <NotificationsIcon sx={{ display: { sm: 'flex', md: 'none' } }} />
-									}
-								</IconButton>
-								<IconButton
-									size="large"
-									color="inherit"
-									onClick={handleThemeChange}
-									sx={{ display: { sm: 'none', md: 'inline-flex' } }}
-								>
-									{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
-								</IconButton>
-							</Box>
-							<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-								<IconButton
-									size="large"
-									aria-label="notifications"
-									color="inherit"
-									onClick={handleNotificationOpen}
-									aria-haspopup="true"
-									aria-controls="primary-notification-dropdown"
-								>
-									{notifications.length > 0 ?
-										<Badge badgeContent={notifications.filter(notif => !notif.read).length} color="error">
-											<NotificationsIcon />
-										</Badge>
-										: <NotificationsIcon />
-									}
-								</IconButton>
-								<IconButton
-									size="large"
-									edge="end"
-									aria-label="options"
-									aria-controls='primary-search-account-menu'
-									aria-haspopup="true"
-									onClick={handleMobileMenuOpen}
-									color="inherit"
-								>
-									<ArrowDropDownIcon />
-								</IconButton>
-							</Box>
-							<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-								<IconButton
-									size="large"
-									aria-label="show more"
-									aria-controls='primary-search-account-menu-mobile'
-									aria-haspopup="true"
-									onClick={handleMobileMenuOpen}
-									color="inherit"
-								>
-									<ArrowDropDownIcon />
-								</IconButton>
-							</Box>
-						</>
-					) : (
-						<>
-							<Box sx={{ flexGrow: 1 }} />
-							<Box>
-								<IconButton
-									size="large"
-									color="inherit"
-									onClick={handleThemeChange}
-									sx={{ display: { sm: 'none', md: 'inline-flex' } }}
-								>
-									{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
-								</IconButton>
-							</Box>
-						</>
-					)}
-				</Toolbar>
-			</AppBar>
-			{renderNotificationDropdown}
-			{renderDropdownOption}
-			<DeleteNotif open={openDeleteModal} handleClose={handleCloseDeleteModal} id={notifId} deleteNotif={deleteNotif} />
-			<MobileDrawer openDrawer={openDrawer} handleCloseDrawer={handleCloseDrawer} />
-		</Box>
+						<Banner
+							variant="h6"
+							noWrap
+							component={Link}
+							to="/"
+						>
+							SC
+						</Banner>
+						{authenticated ? (
+							<Search>
+								<SearchIconWrapper>
+									<SearchIcon />
+								</SearchIconWrapper>
+								<StyledInputBase
+									placeholder="Search…"
+									inputProps={{ 'aria-label': 'search' }}
+								/>
+							</Search>
+						) : null}
+						{authenticated ? (
+							<>
+								<Box sx={{ flexGrow: 1 }} />
+								<Box sx={{ display: 'flex', alignItems: 'center' }}>
+									<ProfileBtn component={Link} to="/profile" variant="contained" disableElevation color="info" startIcon={<Avatar sx={{ width: 24, height: 24 }} src={credentials?.img || noMan}>{credentials.fullname[0]}</Avatar>}>
+										{credentials.fullname}
+									</ProfileBtn>
+									<Avatar component={Link} to="/profile" sx={{ width: 24, height: 24, display: { sm: 'flex', md: 'none' }, textDecoration: 'none', marginX: 1 }} src={credentials.img || noMan}>{credentials.fullname[0]}</Avatar>
+									<IconButton
+										size="large"
+										color="inherit"
+										onClick={handleThemeChange}
+									>
+										{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+									</IconButton>
+								</Box>
+								<Box>
+									<IconButton
+										size="large"
+										aria-label="notifications"
+										color="inherit"
+										aria-haspopup="true"
+										id="notification-button"
+										aria-expanded={openNotif ? "true" : undefined}
+										aria-controls={openNotif ? "primary-notification-dropdown" : undefined}
+										ref={notificationAnchorEl}
+										onClick={handleNotificationToggle}
+									>
+										{notifications.length > 0 ?
+											<Badge badgeContent={notifications.filter(notif => !notif.read).length} color="error">
+												<NotificationsIcon />
+											</Badge>
+											: <NotificationsIcon />
+										}
+									</IconButton>
+								</Box>
+								<Box>
+									<IconButton
+										size="large"
+										aria-label="show more"
+										aria-controls='primary-search-account-menu-mobile'
+										aria-haspopup="true"
+										onClick={handleMobileMenuOpen}
+										color="inherit"
+									>
+										<ArrowDropDownIcon />
+									</IconButton>
+								</Box>
+							</>
+						) : (
+							<>
+								<Box sx={{ flexGrow: 1 }} />
+								<Box>
+									<IconButton
+										size="large"
+										color="inherit"
+										onClick={handleThemeChange}
+										sx={{ display: { sm: 'none', md: 'inline-flex' } }}
+									>
+										{mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+									</IconButton>
+								</Box>
+							</>
+						)}
+					</Toolbar>
+				</AppBar>
+				<NotificationMenu notifications={notifications} anchorRef={notificationAnchorEl} open={openNotif} setOpen={setOpenNotif} handleClose={handleCloseNotification} />
+				{/* {renderNotificationDropdown} */}
+				{renderDropdownOption}
+				<DeleteNotif open={openDeleteModal} handleOpenDeleteModal={handleOpenDeleteModal} handleClose={handleCloseDeleteModal} id={notifId} deleteNotif={deleteNotif} />
+				<MobileDrawer openDrawer={openDrawer} handleCloseDrawer={handleCloseDrawer} />
+			</Box>
+			<Offset />
+		</>
 	)
 }
 

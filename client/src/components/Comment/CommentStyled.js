@@ -51,5 +51,8 @@ export const CommentMessage = styled(CardContent)(({ theme }) => ({
 	"& p": {
 		wordBreak: "break-all",
 		whiteSpace: "normal",
+	},
+	"&:last-child": {
+		paddingBottom: theme.spacing(1)
 	}
 }));

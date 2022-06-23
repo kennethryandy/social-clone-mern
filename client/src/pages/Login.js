@@ -92,10 +92,12 @@ const Login = () => {
 							fullWidth
 							name="email"
 							type="email"
+							id="email"
 							value={inputField.email}
 							onChange={handleChange}
 							error={!!errors.email || !!errors.general}
 							helperText={errors.email}
+							autoFocus
 						/>
 						<Box width="100%">
 							<Box sx={{ width: "100%", display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: { xs: 2, md: 3 } }}>
@@ -103,8 +105,8 @@ const Login = () => {
 									<FormControl variant="outlined" fullWidth>
 										<InputLabel error={!!errors.password} htmlFor="outlined-adornment-password">Password</InputLabel>
 										<OutlinedInput
-											id="outlined-adornment-password"
 											name="password"
+											id="password"
 											type={showPassword ? 'text' : 'password'}
 											value={inputField.password}
 											onChange={handleChange}

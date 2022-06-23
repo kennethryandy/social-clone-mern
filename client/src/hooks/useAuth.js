@@ -19,7 +19,8 @@ const useAuth = () => {
 				axios.defaults.headers.common['Authorization'] = token;
 			}
 		}
-	}, [token, dispatch]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	return [authenticated, Object.keys(credentials).length !== 0];
 

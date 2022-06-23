@@ -110,6 +110,7 @@ const Register = () => {
 								error={!!errors.fname}
 								helperText={errors.fname}
 								inputProps={{ style: { textTransform: "capitalize" } }}
+								autoFocus
 							/>
 							<TextField
 								label="Last Name"

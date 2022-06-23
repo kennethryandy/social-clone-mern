@@ -59,7 +59,7 @@ const Post = ({ post, user, showComment, dialog, handleClosePostDialog }) => {
 					subheader={dayjs(post.createdAt).fromNow()}
 				/>
 				<CardContent>
-					{post.img ? null : <Typography variant={post.content.length < 32 ? "h5" : "body1"} component="p">{post.content}</Typography>}
+					{post.img ? null : <Typography sx={{ wordBreak: 'break-all', whiteSpace: 'normal' }} variant={post.content.length < 32 ? "h5" : "body1"} component="p">{post.content}</Typography>}
 				</CardContent>
 				<CardContent sx={{ paddingY: 1, display: 'flex', gap: 1 }}>
 				</CardContent>

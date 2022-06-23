@@ -1,9 +1,11 @@
-import { styled, alpha, lighten } from '@mui/material/styles';
+import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import CardHeader from '@mui/material/CardHeader';
-import { Menu, MenuItem } from '@mui/material';
+
+export const Offset = styled('div')(({ theme }) => ({
+	...theme.mixins.toolbar
+}))
 
 export const Search = styled('div')(({ theme }) => ({
 	position: 'relative',
@@ -67,31 +69,5 @@ export const ProfileBtn = styled(Button)(({ theme }) => ({
 	},
 	[theme.breakpoints.down('md')]: {
 		display: 'none'
-	}
-}));
-
-
-export const NotificationMenuContainer = styled(Menu)(({ theme }) => ({
-	"& .MuiList-root": {
-		paddingTop: 0,
-		paddingBottom: 0
-	}
-}));
-
-export const NotificationMenu = styled(MenuItem)(({ theme }) => ({
-	"&.unread": {
-		backgroundColor: lighten(theme.palette.primary.main, 0.8),
-		color: theme.palette.primary.main
-	},
-	"&:hover": {
-		backgroundColor: lighten(theme.palette.primary.light, 0.6)
-	}
-}));
-
-export const NotificationMessage = styled(CardHeader)(({ theme }) => ({
-	padding: `${theme.spacing(1)} 0px`,
-	width: "100%",
-	"& .MuiCardHeader-action": {
-		paddingLeft: theme.spacing(2)
 	}
 }));
