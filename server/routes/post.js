@@ -41,7 +41,6 @@ router.post('/add', isAuth, upload.single('file'), async (req, res, next) => {
 	try {
 		const newPostObj = {
 			content: req.body.content,
-			type: "text",
 			creator: req.user.id
 		};
 		if (req.file) {
