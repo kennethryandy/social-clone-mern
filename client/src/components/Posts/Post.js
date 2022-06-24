@@ -53,8 +53,10 @@ const Post = ({ post, user, showComment, dialog, handleClosePostDialog, loadingD
 
 	const handleDeletePost = () => {
 		setOpenSettings(false);
-		dispatch(setLoadingDeletePostId(post._id));
-		dispatch(deletePost(post._id));
+		if (post.creator._id === credentials.id) {
+			dispatch(setLoadingDeletePostId(post._id));
+			dispatch(deletePost(post._id));
+		}
 	}
 
 
@@ -70,7 +72,6 @@ const Post = ({ post, user, showComment, dialog, handleClosePostDialog, loadingD
 			dispatch(likePost(post._id));
 		}
 	}
-
 
 
 	return (
@@ -119,7 +120,7 @@ const Post = ({ post, user, showComment, dialog, handleClosePostDialog, loadingD
 								id="post-settings-menu"
 								aria-labelledby="post-settings-button"
 							>
-								<MenuItem onClick={handleDeletePost}>
+								<MenuItem onClick={handleDeletePost} disabled={post.creator._id !== credentials.id}>
 									<ListItemIcon>
 										<DeleteForeverIcon />
 									</ListItemIcon>
