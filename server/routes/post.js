@@ -1,5 +1,8 @@
 const isAuth = require('../middleware/isAuth');
 const upload = require('../middleware/upload');
+const Notification = require('../model/notification');
+const Like = require('../model/like');
+const Comment = require('../model/comment');
 const Post = require('../model/post');
 const User = require('../model/user');
 const router = require('express').Router();
@@ -103,7 +106,7 @@ router.get('/:id', isAuth, async (req, res, next) => {
 
 
 // Update post
-router.put('/:id', isAuth, (req, res, next) => {
+router.put('/:id', isAuth, async (req, res, next) => {
 	try {
 		Post.findById(req.params.id, (err, post) => {
 			if (err) {
@@ -127,7 +130,8 @@ router.put('/:id', isAuth, (req, res, next) => {
 
 // Delete post
 router.delete('/:id', isAuth, (req, res, next) => {
-	Post.findOneAndDelete({ _id: req.params.id }, (err, post) => {
+
+	Post.findOneAndDelete({ _id: req.params.id, creator: req.user.id }, async (err, post) => {
 		if (err) {
 			next(err);
 			return;
@@ -138,6 +142,11 @@ router.delete('/:id', isAuth, (req, res, next) => {
 				message: "Post not found."
 			})
 		}
+
+		await User.findOneAndUpdate({ _id: req.user.id }, { $pull: { posts: req.params.id } });
+		await Notification.deleteMany({ post: req.params.id });
+		await Like.deleteMany({ postId: req.params.id });
+		await Comment.deleteMany({ postId: req.params.id });
 		return res.json({
 			success: 1,
 			message: "Post successfully deleted."
