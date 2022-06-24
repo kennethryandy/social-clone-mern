@@ -11,7 +11,6 @@ import IconButton from '@mui/material/IconButton';
 import Badge from '@mui/material/Badge';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-// import Menu from '@mui/material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -252,8 +251,7 @@ const NavBar = ({ handleThemeChange, mode }) => {
 						)}
 					</Toolbar>
 				</AppBar>
-				<NotificationMenu notifications={notifications} anchorRef={notificationAnchorEl} open={openNotif} setOpen={setOpenNotif} handleClose={handleCloseNotification} />
-				{/* {renderNotificationDropdown} */}
+				<NotificationMenu notifications={notifications} anchorRef={notificationAnchorEl} open={openNotif} setOpen={setOpenNotif} handleClose={handleCloseNotification} handleOpenDeleteModal={handleOpenDeleteModal} />
 				{renderDropdownOption}
 				<DeleteNotif open={openDeleteModal} handleOpenDeleteModal={handleOpenDeleteModal} handleClose={handleCloseDeleteModal} id={notifId} deleteNotif={deleteNotif} />
 				<MobileDrawer openDrawer={openDrawer} handleCloseDrawer={handleCloseDrawer} />

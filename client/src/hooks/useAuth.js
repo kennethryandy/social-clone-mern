@@ -11,8 +11,9 @@ const useAuth = () => {
 
 	useEffect(() => {
 		if (token) {
-			const decodedToken = jwtDecode(token)
-			if (decodedToken.exp * 1000 <= Date.now()) {
+			const decodedToken = jwtDecode(token);
+
+			if (decodedToken.exp <= Date.now().valueOf() / 1000) {
 				dispatch(logoutUser());
 			} else {
 				dispatch(setAuth());

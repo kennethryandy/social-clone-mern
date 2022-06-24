@@ -13,12 +13,14 @@ import Posts from '../components/Posts/Posts';
 import { setNotifications } from '../features/user/userSlice';
 import { setPosts, setLoading, setUnloading } from '../features/post/postSlice';
 import SinglePostDialog from '../components/Posts/SinglePostDialog';
+import useAuth from '../hooks/useAuth';
 
 const Home = () => {
 	const { loading } = useSelector(store => store.post);
 	const { data: postsData, loading: postLoading } = useFecthData(`${baseURL}/post/all`);
 	const { data: notifData, loading: loadingNotif } = useFecthData(`${baseURL}/notification/user`);
 	const dispatch = useDispatch();
+	useAuth();
 
 	useEffect(() => {
 		if (notifData?.success && !loadingNotif) {

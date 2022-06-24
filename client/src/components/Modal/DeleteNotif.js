@@ -16,7 +16,7 @@ const DeleteNotif = ({ open, handleClose, deleteNotif }) => {
 			aria-describedby="alert-dialog-description"
 		>
 			<DialogTitle id="alert-dialog-title">
-				{"Use Google's location service?"}
+				{"Delete Notification"}
 				<IconButton
 					aria-label="close"
 					onClick={handleClose}
@@ -32,8 +32,7 @@ const DeleteNotif = ({ open, handleClose, deleteNotif }) => {
 			</DialogTitle>
 			<DialogContent>
 				<DialogContentText id="alert-dialog-description">
-					Let Google help apps determine location. This means sending anonymous
-					location data to Google, even when no apps are running.
+					Are you sure you want to delete this notification?
 				</DialogContentText>
 			</DialogContent>
 			<DialogActions>

@@ -26,7 +26,10 @@ export const NotificationMenuItem = styled(MenuItem)(({ theme }) => ({
 export const NotificationMessage = styled(CardHeader)(({ theme }) => ({
 	padding: `${theme.spacing(1)} 0px`,
 	width: "100%",
-	"& .MuiCardHeader-action": {
-		paddingLeft: theme.spacing(2)
+	textDecoration: "none",
+	color: "inherit",
+	"& .MuiCardHeader-title": {
+		whiteSpace: "normal",
+		wordBreak: "break-all"
 	}
 }));

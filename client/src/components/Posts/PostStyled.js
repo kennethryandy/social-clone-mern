@@ -25,22 +25,20 @@ export const PostCreatorHeaderStyled = styled(CardHeader)(({ theme }) => ({
 	}
 }));
 
-export const AddPostInputWrapper = styled(CardContent)`
-	position: relative;
-	& .emoji,.photo {
-		position: absolute;
-		top: 50%;
-		right: 24px;
-		transform: translateY(-50%);
-		display: none;
-		&.show {
-			display: inline-flex;
+export const AddPostInputWrapper = styled(CardContent)(({ theme }) => ({
+	[theme.breakpoints.up('sm')]: {
+		position: "relative",
+		"& .emoji,.photo": {
+			position: "absolute",
+			top: "50%",
+			right: 24,
+			transform: "translateY(-50%)"
+		},
+		"& .photo": {
+			right: "60px",
 		}
 	}
-	& .photo {
-		right: 60px;
-	}
-`;
+}));
 
 export const StyledCardMedia = styled(CardMedia)`
 	max-width: 420px;

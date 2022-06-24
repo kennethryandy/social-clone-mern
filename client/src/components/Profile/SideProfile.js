@@ -15,7 +15,7 @@ import FeedIcon from '@mui/icons-material/Feed';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LanguageIcon from '@mui/icons-material/Language';
 // Styled Components
-import { ProfileImg, UserDetail } from './SideProfStyled';
+import { ProfileImg, UserDetail, UserDetailList } from './SideProfStyled';
 
 const SideProfile = () => {
 	const { credentials } = useSelector(store => store.user);
@@ -37,7 +37,7 @@ const SideProfile = () => {
 				</ListItem>
 			</List>
 			<Divider />
-			<List>
+			<UserDetailList>
 				{credentials.bio && (
 					<ListItem>
 						<ListItemIcon>
@@ -72,7 +72,7 @@ const SideProfile = () => {
 						</ListItemButton>
 					</ListItem>
 				)}
-			</List>
+			</UserDetailList>
 		</>
 	)
 }

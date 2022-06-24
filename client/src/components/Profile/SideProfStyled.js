@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import { styled } from '@mui/material/styles';
 import ListItemText from '@mui/material/ListItemText';
+import List from '@mui/material/List';
 
 export const ProfileImgWrapper = styled(Box)(({ theme }) => ({
 	position: "relative",
@@ -55,6 +56,18 @@ export const ProfileImg = styled(Button)(({ theme }) => ({
 	}
 }));
 
+export const UserDetailList = styled(List)(({ theme }) => ({
+	[theme.breakpoints.down('sm')]: {
+		"& li": {
+			paddingLeft: 0,
+			paddingRight: 0,
+			"& .MuiListItemIcon-root": {
+				minWidth: 40
+			}
+		}
+	}
+}));
+
 export const UserDetail = styled(ListItemText)(({ theme }) => ({
 	textAlign: "center",
 	"&.user-details": {
@@ -66,5 +79,9 @@ export const UserDetail = styled(ListItemText)(({ theme }) => ({
 	},
 	"& .MuiTypography-root": {
 		fontWeight: 500,
+	},
+	[theme.breakpoints.down('sm')]: {
+		wordBreak: "break-all",
+		whiteSpace: "normal"
 	}
 }));
