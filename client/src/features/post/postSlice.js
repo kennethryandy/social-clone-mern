@@ -3,6 +3,8 @@ import postService from "./postService";
 
 export const createPost = createAsyncThunk("post/createPost", postService.creatPostService);
 
+export const deletePost = createAsyncThunk("post/deletePost", postService.deletePostService);
+
 export const addComment = createAsyncThunk("comment/add", postService.addCommentService);
 
 export const likePost = createAsyncThunk("post/likePost", postService.likePostService);
@@ -11,6 +13,7 @@ export const unlikePost = createAsyncThunk("post/unlikePost", postService.unlike
 
 const initialState = {
 	loading: false,
+	loadingDeletePostId: null,
 	loadingComment: false,
 	loadingLike: false,
 	addPostLoading: false,
@@ -35,6 +38,9 @@ const postSlice = createSlice({
 		setUserPosts: (state, { payload }) => {
 			state.userPosts = payload;
 		},
+		setLoadingDeletePostId: (state, { payload }) => {
+			state.loadingDeletePostId = payload;
+		}
 	},
 	extraReducers: {
 		// Post
@@ -53,6 +59,25 @@ const postSlice = createSlice({
 		[createPost.rejected]: (state, action) => {
 			state.addPostLoading = false;
 			console.log(action);
+		},
+		// Delete a post
+		[deletePost.fulfilled]: (state, { payload }) => {
+			console.log(payload);
+			if (payload.data.success) {
+				const postIdx = state.posts.findIndex(post => post._id === payload.postId);
+				if (postIdx !== -1) {
+					state.posts.splice(postIdx, 1);
+				}
+				const userPostIdx = state.userPosts.findIndex(post => post._id === payload.postId);
+				if (userPostIdx !== -1) {
+					state.userPosts.splice(userPostIdx, 1);
+				}
+			}
+			state.loadingDeletePostId = null;
+		},
+		[deletePost.rejected]: (state, action) => {
+			console.log(action);
+			state.loadingDeletePostId = null;
 		},
 		// Comment
 		[addComment.pending]: (state) => {
@@ -139,6 +164,6 @@ const postSlice = createSlice({
 	}
 });
 
-export const { setPosts, setLoading, setUnloading, setUserPosts } = postSlice.actions;
+export const { setPosts, setLoading, setUnloading, setUserPosts, setLoadingDeletePostId } = postSlice.actions;
 
 export default postSlice.reducer;

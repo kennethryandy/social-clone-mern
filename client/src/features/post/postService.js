@@ -12,6 +12,18 @@ const creatPostService = async (postData, thunkAPI) => {
 	}
 }
 
+const deletePostService = async (postId, thunkAPI) => {
+	try {
+		const { data } = await axios.delete(`/post/${postId}`);
+		return {
+			data,
+			postId: postId
+		};
+	} catch (err) {
+		thunkAPI.rejectWithValue(err.message);
+	}
+}
+
 const addCommentService = async (body, thunkAPI) => {
 	try {
 		const { data } = await axios.post('/comment/add', body);
@@ -39,5 +51,5 @@ const unlikePostService = async (postId, thunkAPI) => {
 	}
 }
 
-const postServices = { addCommentService, creatPostService, likePostService, unlikePostService };
+const postServices = { addCommentService, creatPostService, deletePostService, likePostService, unlikePostService };
 export default postServices;
