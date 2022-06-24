@@ -44,7 +44,7 @@ const Home = () => {
 						{!postLoading ? <Paper elevation={2}><SideProfile /></Paper> : <ProfileSkeleton />}
 					</Grid>
 					<Grid item md={8} sm={12} sx={{ width: "100%" }}>
-						{!postLoading ? <Posts /> : <PostSkeleton />}
+						{!postLoading ? <Posts /> : <PostSkeleton item={6} />}
 					</Grid>
 				</Grid>
 			</Container>

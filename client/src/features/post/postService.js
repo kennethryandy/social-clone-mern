@@ -8,7 +8,7 @@ const creatPostService = async (postData, thunkAPI) => {
 			user: thunkAPI.getState().user.user
 		};
 	} catch (err) {
-		thunkAPI.error(err.message);
+		thunkAPI.rejectWithValue(err.message);
 	}
 }
 
@@ -17,7 +17,7 @@ const addCommentService = async (body, thunkAPI) => {
 		const { data } = await axios.post('/comment/add', body);
 		return data;
 	} catch (err) {
-		thunkAPI.error(err.message);
+		thunkAPI.rejectWithValue(err.message);
 	}
 };
 
@@ -26,7 +26,7 @@ const likePostService = async (postId, thunkAPI) => {
 		const { data } = await axios.post(`/like/${postId}`);
 		return data;
 	} catch (err) {
-		thunkAPI.error(err.message);
+		thunkAPI.rejectWithValue(err.message);
 	}
 }
 
@@ -35,7 +35,7 @@ const unlikePostService = async (postId, thunkAPI) => {
 		const { data } = await axios.delete(`/like/${postId}`);
 		return data;
 	} catch (err) {
-		thunkAPI.error(err.message);
+		thunkAPI.rejectWithValue(err.message);
 	}
 }
 

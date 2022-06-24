@@ -3,17 +3,16 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { likePost, unlikePost } from '../../features/post/postSlice';
-import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton } from './PostStyled';
+import { PostPaperStyled, PostCreatorHeaderStyled, StyledPostButton, StyledCardMedia } from './PostStyled';
 import noMan from '../../assets/image/no-man.jpg';
 import Comment from '../Comment/Comments';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
-import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
 import Divider from '@mui/material/Divider';
-// import CardMedia from '@mui/material/CardMedia';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 // MUI ICON
@@ -59,10 +58,15 @@ const Post = ({ post, user, showComment, dialog, handleClosePostDialog }) => {
 					subheader={dayjs(post.createdAt).fromNow()}
 				/>
 				<CardContent>
-					{post.img ? null : <Typography sx={{ wordBreak: 'break-all', whiteSpace: 'normal' }} variant={post.content.length < 32 ? "h5" : "body1"} component="p">{post.content}</Typography>}
+					{<Typography sx={{ wordBreak: 'break-all', whiteSpace: 'normal' }} variant={post.content.length < 32 ? "h5" : "body1"} component="p">{post.content}</Typography>}
 				</CardContent>
-				<CardContent sx={{ paddingY: 1, display: 'flex', gap: 1 }}>
-				</CardContent>
+				{post.imgUrl && (
+					<StyledCardMedia
+						component="img"
+						image={post.imgUrl}
+						alt={post.content}
+					/>
+				)}
 				<Divider />
 				<CardActions>
 					<LikeTooltip likes={post.likes} userId={credentials.id}>

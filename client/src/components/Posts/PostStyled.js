@@ -3,6 +3,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 
 export const PostPaperStyled = styled(Card)(({ theme }) => ({
 	width: "100%",
@@ -26,7 +27,7 @@ export const PostCreatorHeaderStyled = styled(CardHeader)(({ theme }) => ({
 
 export const AddPostInputWrapper = styled(CardContent)`
 	position: relative;
-	& .emoji {
+	& .emoji,.photo {
 		position: absolute;
 		top: 50%;
 		right: 24px;
@@ -36,6 +37,17 @@ export const AddPostInputWrapper = styled(CardContent)`
 			display: inline-flex;
 		}
 	}
+	& .photo {
+		right: 60px;
+	}
+`;
+
+export const StyledCardMedia = styled(CardMedia)`
+	max-width: 420px;
+	max-height: 600px;
+	height: 100%;
+	padding-bottom: 16px;
+	margin: auto;
 `;
 
 export const StyledInput = styled('textarea')(({ theme }) => ({

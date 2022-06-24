@@ -13,6 +13,7 @@ const initialState = {
 	loading: false,
 	loadingComment: false,
 	loadingLike: false,
+	addPostLoading: false,
 	errors: {},
 	posts: [],
 	userPosts: []
@@ -38,20 +39,19 @@ const postSlice = createSlice({
 	extraReducers: {
 		// Post
 		[createPost.pending]: (state) => {
-			state.loading = true;
+			state.addPostLoading = true;
 		},
 		[createPost.fulfilled]: (state, { payload }) => {
-			console.log(payload);
 			if (payload.data.success) {
 				state.posts.unshift(payload.data.post);
 				if (payload.user?.id === payload.data.post.creator.id) {
 					state.userPosts.unshift(payload.data.post);
 				}
 			}
-			state.loading = false;
+			state.addPostLoading = false;
 		},
 		[createPost.rejected]: (state, action) => {
-			state.loading = false;
+			state.addPostLoading = false;
 			console.log(action);
 		},
 		// Comment

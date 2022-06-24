@@ -2,11 +2,13 @@ import Paper from "@mui/material/Paper";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
+import PropTypes from 'prop-types';
 
-const PostSkeleton = () => {
+const PostSkeleton = ({item, withImage}) => {
+	
 	return (
 		<>
-			{[1, 2, 3, 4, 5].map((i) => (
+			{Array(item).fill(null).map((_,i) => (
 				<Paper
 					key={i}
 					elevation={3}
@@ -41,6 +43,13 @@ const PostSkeleton = () => {
 								height={20}
 							/>
 						</Box>
+						{withImage && (
+							<Skeleton
+							variant="rectangular"
+							width="100%"
+							height={280}
+						/>
+						)}
 						<Skeleton
 							variant="rectangular"
 							width="65%"
@@ -57,5 +66,15 @@ const PostSkeleton = () => {
 		</>
 	);
 };
+
+PostSkeleton.propTypes = {
+	item: PropTypes.number,
+	withImage: PropTypes.bool
+}
+
+PostSkeleton.defaultProps = {
+	item: 1,
+	withImage: false
+}
 
 export default PostSkeleton;
